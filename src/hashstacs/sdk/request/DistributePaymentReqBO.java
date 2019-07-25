@@ -74,7 +74,7 @@ public class DistributePaymentReqBO extends ReqBO {
 	}
 	
 	private void generateTxId() {
-		_origReqObj.setCallbackUrl("http://payment_record_/" + _paymentRecordTxId + "/distribute_payment_/" + _txId + "/" + System.currentTimeMillis());
+		_origReqObj.setCallbackUrl("http://payment_record_/" + _paymentRecordTxId + "/distribute_payment_/" + _txId);
 		_txId = GspECKey.generate64TxId(_origReqObj.getSignValue());
 		_origReqObj.setTxId(_txId);
 	}
