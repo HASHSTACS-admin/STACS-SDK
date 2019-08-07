@@ -37,7 +37,7 @@ import lombok.extern.slf4j.Slf4j;
 public class StacsUtil {
 
 	//Configuration File Keys
-	private static final String CONFIG_PROPERTIES = "config.properties";
+	private static String _configProperties;
 	
 	private static FileReader _propertiesFile;
 	private static Properties _properties;
@@ -52,6 +52,15 @@ public class StacsUtil {
 		System.out.println("Public Key: " + newKey.getPublicKeyAsHex());
 		System.out.println("Private Key: " + StacsUtil.toHex(newKey.getPrivKeyBytes()));
 		System.out.println("Wallet Address: " + newKey.getHexAddress());
+	}
+	
+	/**
+	 * loads the absolute file path of the properties file for the first time
+	 */
+	public static void loadPropertiesFileAbsLocation(String location) {
+		if(_configProperties==null) {
+			_configProperties = location;	
+		}
 	}
 	
 	/**
@@ -122,6 +131,12 @@ public class StacsUtil {
 	 * initializes the configuration properties file
 	 */
 	private static void initializeProperties() {
+		//if properties file has not been initialized, skip the remainder steps
+		if(_configProperties == null) {
+			log.error("config properties file has not been loaded.");
+			return ;
+		}
+		
 		//if properties has already been initialized, skip the remainder steps
 		if(_propertiesFile != null | _properties != null) {
 			 return ;
@@ -129,7 +144,7 @@ public class StacsUtil {
 		
 		//setup the properties needed from the configuration file
 		try {
-			_propertiesFile = new FileReader(CONFIG_PROPERTIES);
+			_propertiesFile = new FileReader(_configProperties);
 			
 		} catch (FileNotFoundException e) {
 			log.error(e.toString());

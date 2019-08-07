@@ -55,6 +55,7 @@ public class SampleUsage {
 	private static String _freezeKeyAddress;
 	
 	private static String SAMPLE_TOKEN = "BOND2019";
+	private static String CONFIG_PROPERTIES = "config.properties";
 	
 	public static void main(String[] args)  {
 	
@@ -74,6 +75,7 @@ public class SampleUsage {
 	
 	private static void initialize() {
 		//load configuration file
+		StacsUtil.loadPropertiesFileAbsLocation(CONFIG_PROPERTIES);
 		_chainPubKey = StacsUtil.getConfigProperty(StacsUtil.ConfigEnums.NODE_PUBKEY);
 		_merchantPriKey = StacsUtil.getConfigProperty(StacsUtil.ConfigEnums.NODE_PRIKEY);
 		_aesKey = StacsUtil.getConfigProperty(StacsUtil.ConfigEnums.NODE_AESKEY);
