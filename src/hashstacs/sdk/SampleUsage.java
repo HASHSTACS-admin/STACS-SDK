@@ -75,29 +75,29 @@ public class SampleUsage {
 	
 	private static void initialize() {
 		//load configuration file
-		StacsUtil.loadPropertiesFileAbsLocation(CONFIG_PROPERTIES);
-		_chainPubKey = StacsUtil.getConfigProperty(StacsUtil.ConfigEnums.NODE_PUBKEY);
-		_merchantPriKey = StacsUtil.getConfigProperty(StacsUtil.ConfigEnums.NODE_PRIKEY);
-		_aesKey = StacsUtil.getConfigProperty(StacsUtil.ConfigEnums.NODE_AESKEY);
-		_merchantId = StacsUtil.getConfigProperty(StacsUtil.ConfigEnums.NODE_MERCHANTID);
-		_gatewayUrl = StacsUtil.getConfigProperty(StacsUtil.ConfigEnums.NODE_GATEWAY);
+		
+		_chainPubKey = StacsUtil.getConfigProperty(CONFIG_PROPERTIES,StacsUtil.ConfigEnums.NODE_PUBKEY);
+		_merchantPriKey = StacsUtil.getConfigProperty(CONFIG_PROPERTIES,StacsUtil.ConfigEnums.NODE_PRIKEY);
+		_aesKey = StacsUtil.getConfigProperty(CONFIG_PROPERTIES,StacsUtil.ConfigEnums.NODE_AESKEY);
+		_merchantId = StacsUtil.getConfigProperty(CONFIG_PROPERTIES,StacsUtil.ConfigEnums.NODE_MERCHANTID);
+		_gatewayUrl = StacsUtil.getConfigProperty(CONFIG_PROPERTIES,StacsUtil.ConfigEnums.NODE_GATEWAY);
 		
 		//initialize Wallet and Blockchain connections
 		_walletConn = WalletConnector.initConn(_chainPubKey, _merchantPriKey, _aesKey, _merchantId, _gatewayUrl);
 		_chainConn = ChainConnector.initConn(_chainPubKey, _merchantPriKey, _aesKey, _merchantId, _gatewayUrl);
 		
 		/*SAMPLE KEY PAIRS VALUES - FOR TESTING PURPOSES ONLY*/
-		_sponsorSignKey = GspECKey.fromPrivate(Hex.decode(StacsUtil.getConfigProperty(StacsUtil.ConfigEnums.SPONSOR_KEY)));
+		_sponsorSignKey = GspECKey.fromPrivate(Hex.decode(StacsUtil.getConfigProperty(CONFIG_PROPERTIES,StacsUtil.ConfigEnums.SPONSOR_KEY)));
 		_sponsorWalletAddress = _sponsorSignKey.getHexAddress();
 		
-		_issuerSignKey = GspECKey.fromPrivate(Hex.decode(StacsUtil.getConfigProperty(StacsUtil.ConfigEnums.ISSUER_KEY)));
+		_issuerSignKey = GspECKey.fromPrivate(Hex.decode(StacsUtil.getConfigProperty(CONFIG_PROPERTIES,StacsUtil.ConfigEnums.ISSUER_KEY)));
 		_tokenCustodyAddress = _issuerSignKey.getHexAddress();
 		
-		_investorSignKey = GspECKey.fromPrivate(Hex.decode(StacsUtil.getConfigProperty(StacsUtil.ConfigEnums.INVESTOR_KEY)));
+		_investorSignKey = GspECKey.fromPrivate(Hex.decode(StacsUtil.getConfigProperty(CONFIG_PROPERTIES,StacsUtil.ConfigEnums.INVESTOR_KEY)));
 		_investorWalletAddress = _investorSignKey.getHexAddress();
 		
 		_freezeKey = 
-				GspECKey.fromPrivate(Hex.decode(StacsUtil.getConfigProperty(StacsUtil.ConfigEnums.FREEZE_PERMISSION_KEY)));
+				GspECKey.fromPrivate(Hex.decode(StacsUtil.getConfigProperty(CONFIG_PROPERTIES,StacsUtil.ConfigEnums.FREEZE_PERMISSION_KEY)));
 		_freezeKeyAddress=_freezeKey.getHexAddress();
 	}
 	

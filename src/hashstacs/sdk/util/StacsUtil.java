@@ -55,21 +55,12 @@ public class StacsUtil {
 	}
 	
 	/**
-	 * loads the absolute file path of the properties file for the first time
-	 */
-	public static void loadPropertiesFileAbsLocation(String location) {
-		if(_configProperties==null) {
-			_configProperties = location;	
-		}
-	}
-	
-	/**
 	 * returns property files stored in the configuration file
 	 * @param configProperty
 	 * @return
 	 */
-	public static String getConfigProperty(ConfigEnums configProperty) {
-		initializeProperties();
+	public static String getConfigProperty(String propertiesFileAbsLocation, ConfigEnums configProperty) {
+		initializeProperties(propertiesFileAbsLocation);
 		
 		//add new properties in the config file here
 		switch(configProperty) {
@@ -130,11 +121,10 @@ public class StacsUtil {
 	/**
 	 * initializes the configuration properties file
 	 */
-	private static void initializeProperties() {
+	private static void initializeProperties(String propertiesFileAbsLocation) {
 		//if properties file has not been initialized, skip the remainder steps
 		if(_configProperties == null) {
-			log.error("config properties file has not been loaded.");
-			return ;
+			_configProperties = propertiesFileAbsLocation;	
 		}
 		
 		//if properties has already been initialized, skip the remainder steps
