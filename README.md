@@ -145,8 +145,8 @@ This SDK version also does not cover the deployment of new or updated smart cont
 ## 3. Pre-requisites
 
 Required minimum versions:
-..* JDK 8
-..* Apache Maven 3.6
+* JDK 8
+* Apache Maven 3.6
 
 
 Request from the STACS node owner the following information:
