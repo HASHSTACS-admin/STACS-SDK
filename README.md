@@ -1,8 +1,10 @@
 # STACS SDK
 
-The STACS Protocol is a STACS Permissioned Blockchain Network that exposes REST API endpoints for applications to connect and interact with the underlying distributed ledger. This SDK provides all essential tools for communicating with a node residing in a STACS network including signing of transactions and encryption in transit. 
+The STACS Protocol is a STACS Permissioned Blockchain Network built by Hashstacs that exposes REST API endpoints for applications to connect and interact with the underlying distributed ledger. This SDK provides all essential tools for communicating with a node residing in a STACS network including signing of transactions and encryption in transit. 
 
 The STACS Java SDK enables applications to sit on top of a STACS Native Permissioned Network and run business processes related to digital assets and tokenized securities by calling the relevant smart contracts encapsulated in the SDK library. 
+
+Reach out to the Solutions team at Hashstacs for questions! support@stacs.io
 
 ## 1. SDK Key Developer Features
 1. Invoke Smart Contract Function calls directly to the STACS network 
