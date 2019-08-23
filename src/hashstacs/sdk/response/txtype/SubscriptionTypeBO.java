@@ -4,6 +4,8 @@ import java.math.BigDecimal;
 import java.text.ParseException;
 import java.util.Date;
 
+import com.alibaba.fastjson.JSONObject;
+
 import hashstacs.sdk.response.RespBO;
 import hashstacs.sdk.util.StacsUtil;
 import hashstacs.sdk.util.TokenUnit;
@@ -34,6 +36,7 @@ public class SubscriptionTypeBO extends RespBO {
 	
 	private String _rawRespCode;
 	private String _rawMsg;
+	private JSONObject _rawJsonObject;
 	
 	public SubscriptionTypeBO() {
 		
@@ -74,6 +77,9 @@ public class SubscriptionTypeBO extends RespBO {
 	}
 	public String getRawMsg() {
 		return _rawMsg;
+	}
+	public JSONObject getRawJsonObject() {
+		return _rawJsonObject;
 	}
 	
 	private void setTokenNum(String value) {
@@ -191,5 +197,10 @@ public class SubscriptionTypeBO extends RespBO {
 	@Override
 	public void setRawMsg(String value) {
 		_rawMsg = value;
+	}
+
+	@Override
+	public void setRawJSONObj(Object value) {
+		_rawJsonObject = (JSONObject) value;
 	}
 }

@@ -5,6 +5,8 @@ import java.text.ParseException;
 import java.util.Date;
 import java.util.List;
 
+import com.alibaba.fastjson.JSONObject;
+
 import hashstacs.sdk.response.RespBO;
 import hashstacs.sdk.util.StacsUtil;
 import hashstacs.sdk.util.TokenUnit;
@@ -37,6 +39,7 @@ public class PaymentRecordTypeBO extends RespBO {
 	
 	private String _rawRespCode;
 	private String _rawMsg;
+	private JSONObject _rawJsonObject;
 	
 	public PaymentRecordTypeBO() {
 		
@@ -76,6 +79,9 @@ public class PaymentRecordTypeBO extends RespBO {
 	}
 	public String getRawMsg() {
 		return _rawMsg;
+	}
+	public JSONObject getRawJsonObject() {
+		return _rawJsonObject;
 	}
 	
 	private void setCreateTime(String value) {
@@ -190,5 +196,9 @@ public class PaymentRecordTypeBO extends RespBO {
 	@Override
 	public void setRawMsg(String value) {
 		 _rawMsg = value;
+	}
+	@Override
+	public void setRawJSONObj(Object value) {
+		_rawJsonObject = (JSONObject) value;
 	}	
 }

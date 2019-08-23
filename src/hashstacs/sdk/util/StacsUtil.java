@@ -44,6 +44,8 @@ public class StacsUtil {
 	
 	private final static SimpleDateFormat _exDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"); 
 	
+	public final static Integer POLL_WAIT_TIME_IN_MS = 3000;
+	
 	/**
 	 * Wallet Generation 
 	 */

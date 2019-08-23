@@ -16,6 +16,7 @@ public class TransferTokenReqBO extends ReqBO {
 	private String _senderWalletAddress;
 	private String _recipientWalletAddress;
 	private TokenUnit _transferAmount;
+	private String _payload;
 	
 	private TransactionInfoBO _origReqObj;
 	
@@ -37,6 +38,10 @@ public class TransferTokenReqBO extends ReqBO {
 		_transferAmount = transferAmount;
 		_origReqObj.setCurrency(transferAmount.get_currency());
 		_origReqObj.setAmount(transferAmount.get_amount().toString());
+	}
+	public void setPayload(String payload) {
+		_payload = payload;
+		_origReqObj.setData(_payload);
 	}
 		
 	@Override

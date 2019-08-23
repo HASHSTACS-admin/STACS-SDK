@@ -2,6 +2,8 @@ package hashstacs.sdk.response;
 
 import java.util.Date;
 
+import com.alibaba.fastjson.JSONObject;
+
 import hashstacs.sdk.util.StacsResponseEnums.LatestBlockResponseEnum;
 
 public class LatestBlockRespBO extends RespBO {
@@ -11,6 +13,7 @@ public class LatestBlockRespBO extends RespBO {
 	
 	private String _rawRespCode;
 	private String _rawMsg;
+	private JSONObject _rawJsonObject;
 	
 	public LatestBlockRespBO() {
 		
@@ -26,6 +29,9 @@ public class LatestBlockRespBO extends RespBO {
 	}
 	public String getRawMsg() {
 		return _rawMsg;
+	}
+	public JSONObject getRawJsonObj() {
+		return _rawJsonObject;
 	}
 	
 	private void setBlockHeight(String value) {
@@ -58,6 +64,10 @@ public class LatestBlockRespBO extends RespBO {
 	@Override
 	public void setRawMsg(String value) {
 		_rawMsg=value;
+	}
+	@Override
+	public void setRawJSONObj(Object value) {
+		_rawJsonObject = (JSONObject) value;
 	}
 
 }

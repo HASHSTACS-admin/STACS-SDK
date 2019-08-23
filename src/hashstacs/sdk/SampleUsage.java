@@ -3,7 +3,6 @@ package hashstacs.sdk;
 import java.math.BigDecimal;
 
 import org.spongycastle.util.encoders.Hex;
-
 import com.hashstacs.sdk.crypto.GspECKey;
 
 import hashstacs.sdk.chain.ChainConnector;
@@ -101,7 +100,7 @@ public class SampleUsage {
 		_freezeKeyAddress=_freezeKey.getHexAddress();
 	}
 	
-	private static void ChainSampleUsage() {
+	private static void ChainSampleUsage() throws InterruptedException {
 
 		/**
 		 *Issuing a token on a STACS Native network with the request object @IssueTokenReqBO and 
@@ -114,7 +113,7 @@ public class SampleUsage {
 		IssueTokenReqBO issueTokenRequest = issueTokenInfo.getIssueRequest();
 		AsyncRespBO issueTokenResponse = _chainConn.issueToken(issueTokenRequest, _sponsorSignKey);
 		log.debug("Issued Token Request Transaction Id: " + issueTokenResponse.get_txId());
-		
+		Thread.sleep(StacsUtil.POLL_WAIT_TIME_IN_MS);
 		IssueTokenStatusRespBO issueTokenStatus = _chainConn.getIssueTokenStatus(issueTokenResponse.get_txId());
 		
 		/**
@@ -128,7 +127,7 @@ public class SampleUsage {
 		GrantSubscribePermReqBO grantSubscriptionPermissionRequest = grantPermissionInfo.getGrantSubscriptionPermissionRequest();
 		AsyncRespBO grantSubscriptionPermissionResponse = _chainConn.grantSubscriptionPermission(grantSubscriptionPermissionRequest, _sponsorSignKey);
 		log.debug("Grant Subscription Permission Request Transaction Id: " + grantSubscriptionPermissionResponse.get_txId());
-		
+		Thread.sleep(StacsUtil.POLL_WAIT_TIME_IN_MS);
 		GrantSubscribePermStatusRespBO grantSubscriptionPermissionStatus = _chainConn.getGrantSubscriptionPermissionStatus(grantSubscriptionPermissionResponse.get_txId());
 				
 		/**
@@ -143,7 +142,7 @@ public class SampleUsage {
 		SubscribeReqBO subscribeRequest = subscribeInfo.getSubscriptionRequest();
 		AsyncRespBO subscribeResponse = _chainConn.subscribeToToken(subscribeRequest, _investorSignKey);
 		log.debug("Subscription Request Transaction Id: " + subscribeResponse.get_txId());
-		
+		Thread.sleep(StacsUtil.POLL_WAIT_TIME_IN_MS);
 		SubscribeStatusRespBO subscribeStatus = _chainConn.getSubscriptionStatus(subscribeResponse.get_txId());
 		
 		/**
@@ -158,7 +157,7 @@ public class SampleUsage {
 		GeneratePaymentRecordReqBO paymentRecordRequest = new GeneratePaymentRecordReqBO();
 		AsyncRespBO paymentRecordResponse = _chainConn.generatePaymentRecord(paymentRecordRequest, _sponsorSignKey);
 		log.debug("payment record request Transaction Id:" + paymentRecordResponse.get_txId());
-	
+		Thread.sleep(StacsUtil.POLL_WAIT_TIME_IN_MS);
 		GeneratePaymentRecordRespBO payRecordStatus = _chainConn.getPaymentRecordStatus(paymentRecordResponse.get_txId());
 		
 		/**
@@ -173,7 +172,7 @@ public class SampleUsage {
 		DistributePaymentReqBO distributePaymentRequest = distributePayment.getDistributePaymentRequest();
 		AsyncRespBO distributePaymentResponse = _chainConn.distributePayment(distributePaymentRequest, _sponsorSignKey);
 		log.debug("distribute payment request Transaction id: " + distributePaymentResponse.get_txId());
-		
+		Thread.sleep(StacsUtil.POLL_WAIT_TIME_IN_MS);
 		DistributePaymentStatusRespBO distributePaymentStatus = _chainConn.getDistributePaymentStatus(distributePaymentResponse.get_txId());		
 
 		/**
@@ -190,7 +189,7 @@ public class SampleUsage {
 		freezeRequest.setFreezeAuthorityAddress(_freezeKeyAddress);
 		AsyncRespBO freezeResponse = _chainConn.freezeOrUnfreezeWallet(freezeRequest, _freezeKey);
 		log.debug("freeze request Transaction id: " + freezeResponse.get_txId());
-		
+		Thread.sleep(StacsUtil.POLL_WAIT_TIME_IN_MS);
 		FreezeOrUnfreezeStatusRespBO freezeStatus = _chainConn.getFreezeOrUnfreezeWalletStatus(freezeResponse.get_txId());
 				
 		/**
@@ -209,7 +208,7 @@ public class SampleUsage {
 		LatestBlockRespBO latestBlockHeight = _chainConn.getLatestBlockHeight();		
 		
 	}
-	private static void WalletSampleUsage() {
+	private static void WalletSampleUsage() throws InterruptedException {
 		/**
 		 *Investors withdrawing or transferring tokens to a different wallet address
 		 *with the request object @TransferTokenReqBO and 
@@ -223,7 +222,7 @@ public class SampleUsage {
 		TransferTokenReqBO transferRequest = transferInfo.getTransferTokenRequest();
 		AsyncRespBO transferResponse = _walletConn.transferToken(transferRequest, _issuerSignKey);
 		log.debug("transfer request Transaction Id:" + transferResponse.get_txId());
-		
+		Thread.sleep(StacsUtil.POLL_WAIT_TIME_IN_MS);
 		TransferTokenStatusRespBO transferStatus = _walletConn.getTransferTokenStatus(transferResponse.get_txId());
 		
 		/**

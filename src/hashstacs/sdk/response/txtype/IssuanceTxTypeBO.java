@@ -4,6 +4,8 @@ import java.math.BigDecimal;
 import java.text.ParseException;
 import java.util.Date;
 
+import com.alibaba.fastjson.JSONObject;
+
 import hashstacs.sdk.response.RespBO;
 import hashstacs.sdk.util.StacsUtil;
 import hashstacs.sdk.util.TokenUnit;
@@ -50,7 +52,8 @@ public class IssuanceTxTypeBO extends RespBO {
 	
 	private String _rawRespCode;
 	private String _rawMsg;
-		
+	private JSONObject _rawJsonObject;
+	
 	public IssuanceTxTypeBO() {
 		
 	}
@@ -120,7 +123,10 @@ public class IssuanceTxTypeBO extends RespBO {
 	public String getRawMsg() {
 		return _rawMsg;
 	}
-
+	public JSONObject getRawJsonObject() {
+		return _rawJsonObject;
+	}
+	
 	/**
 	 * Custom Setter Logic
 	 * All incoming parameters are String types, conversion to be done here
@@ -366,6 +372,10 @@ public class IssuanceTxTypeBO extends RespBO {
 	@Override
 	public void setRawMsg(String value) {
 		_rawMsg=value;
+	}
+	@Override
+	public void setRawJSONObj(Object value) {
+		_rawJsonObject = (JSONObject) value;
 	}
 	
 }

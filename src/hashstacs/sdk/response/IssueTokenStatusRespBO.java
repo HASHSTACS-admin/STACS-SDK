@@ -1,5 +1,7 @@
 package hashstacs.sdk.response;
 
+import com.alibaba.fastjson.JSONObject;
+
 import hashstacs.sdk.util.StacsResponseEnums.IssueTokenStatusResponseEnum;
 import lombok.Setter;
 
@@ -15,6 +17,7 @@ public class IssueTokenStatusRespBO extends RespBO {
 	
 	private String _rawRespCode;
 	private String _rawMsg;
+	private JSONObject _rawJsonObject;
 	
 	public IssueTokenStatusRespBO() {
 		
@@ -42,6 +45,9 @@ public class IssueTokenStatusRespBO extends RespBO {
 	}
 	public String getRawMsg() {
 		return _rawMsg;
+	}
+	public JSONObject getRawJsonObject() {
+		return _rawJsonObject;
 	}
 	
 	private void setResultCode(String value) {
@@ -85,6 +91,10 @@ public class IssueTokenStatusRespBO extends RespBO {
 	@Override
 	public void setRawMsg(String value) {
 		_rawMsg=value;
+	}
+	@Override
+	public void setRawJSONObj(Object value) {
+		_rawJsonObject = (JSONObject) value;
 	}	
 
 }

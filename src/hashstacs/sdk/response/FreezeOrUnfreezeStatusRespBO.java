@@ -1,5 +1,7 @@
 package hashstacs.sdk.response;
 
+import com.alibaba.fastjson.JSONObject;
+
 import hashstacs.sdk.util.StacsResponseEnums.FreezeOrUnfreezeStatusResponseEnum;
 import lombok.Setter;
 
@@ -12,6 +14,7 @@ public class FreezeOrUnfreezeStatusRespBO extends RespBO {
 	
 	private String _rawRespCode;
 	private String _rawMsg;
+	private JSONObject _rawJsonObject;
 	
 	public FreezeOrUnfreezeStatusRespBO() {
 		
@@ -25,11 +28,14 @@ public class FreezeOrUnfreezeStatusRespBO extends RespBO {
 	public String getMessage() {
 		return _message;
 	}
-	public String getRawRespCodde() {
+	public String getRawRespCode() {
 		return _rawRespCode;
 	}
 	public String getRawMsg() {
 		return _rawMsg;
+	}
+	public JSONObject getRawJsonObject() {
+		return _rawJsonObject;
 	}
 	
 	public void setResultCode(String value) {
@@ -61,5 +67,9 @@ public class FreezeOrUnfreezeStatusRespBO extends RespBO {
 	}
 	public void setRawMsg(String value) {
 		_rawMsg=value;
+	}
+	@Override
+	public void setRawJSONObj(Object value) {
+		_rawJsonObject = (JSONObject) value;
 	}
 }

@@ -85,7 +85,7 @@ public class ChainConnector {
 			} else if(newObj.isEmpty()){
 				return txHist;
 			}
-			
+			txHist.setRawJsonObject(newObj);
 			//this query returns 4 lists as of v1.0, to be extracted independently and stored in TxHistoryRecord			
 			for(WalletTokenTxHistoryResponseEnum respProperty : WalletTokenTxHistoryResponseEnum.values()) {
 				//for each type of list, get all the transaction rows and stored them into the List object
@@ -135,6 +135,7 @@ public class ChainConnector {
 			} else if(newObj.isEmpty()){
 				return latestBlockBO;
 			}
+			latestBlockBO.setRawJSONObj(newObj);
 			//changes to the JSON response keys are maintained in the ResponseBO objects, use these keys to retrieve all available fields
 			for(LatestBlockResponseEnum respProperty : LatestBlockResponseEnum.values()) {
 				latestBlockBO.setAtttribute(respProperty, (String)newObj.getString(respProperty.getRespKey()));
@@ -172,6 +173,7 @@ public class ChainConnector {
 					log.debug("failed response");
 				}
 			}
+			asyncResponse.setRawJsonObject(newObj);
 			return asyncResponse;
 			
 		} catch (IOException e) {
@@ -197,6 +199,7 @@ public class ChainConnector {
 			} else if(newObj.isEmpty()){
 				return issueStatusBO;
 			}
+			issueStatusBO.setRawJSONObj(newObj);
 			//changes to the JSON response keys are maintained in the ResponseBO objects, use these keys to retrieve all available fields
 			for(IssueTokenStatusResponseEnum respProperty : IssueTokenStatusResponseEnum.values()) {
 				issueStatusBO.setAtttribute(respProperty, (String)newObj.getString(respProperty.getRespKey()));
@@ -239,7 +242,7 @@ public class ChainConnector {
 					log.debug("returned response is not successful.");
 				}
 			}
-			
+			asyncResponse.setRawJsonObject(newObj);
 			return asyncResponse;
 		} catch (IOException e) {
 			log.error(e.toString());
@@ -264,6 +267,7 @@ public class ChainConnector {
 			} else if(newObj.isEmpty()) {
 				return grantStatusBO;
 			}
+			grantStatusBO.setRawJSONObj(newObj);
 			//changes to the JSON response keys are maintained in the ResponseBO objects, use these keys to retrieve all available fields
 			for(GrantSubscribePermStatusResponseEnum respProperty : GrantSubscribePermStatusResponseEnum.values()) {
 				grantStatusBO.setAtttribute(respProperty, (String)newObj.getString(respProperty.getRespKey()));
@@ -299,6 +303,7 @@ public class ChainConnector {
 					log.debug("failed response");
 				} 
 			}
+			asyncResponse.setRawJsonObject(newObj);
 			return asyncResponse;
 		} catch (IOException e) {
 			log.error(e.toString());
@@ -323,7 +328,7 @@ public class ChainConnector {
 			} else if(newObj.isEmpty()) {
 				return subscribeStatusBO;
 			}
-			
+			subscribeStatusBO.setRawJSONObj(newObj);
 			
 			//changes to the JSON response keys are maintained in the ResponseBO objects, use these keys to retrieve all available fields
 			for(SubscribeStatusResponseEnum respProperty : SubscribeStatusResponseEnum.values()) {
@@ -359,6 +364,7 @@ public class ChainConnector {
 					log.debug("failed response");
 				}
 			}
+			asyncResponse.setRawJsonObject(newObj);
 			return asyncResponse;
 		} catch (IOException e) {
 			log.error(e.toString());
@@ -383,6 +389,7 @@ public class ChainConnector {
 			}else if(newObj.isEmpty()) {
 				return paymentRecordStatusBO;
 			}
+			paymentRecordStatusBO.setRawJSONObj(newObj);
 			//changes to the JSON response keys are maintained in the ResponseBO objects, use these keys to retrieve all available fields
 			for(PaymentRecordStatusResponseEnum respProperty : PaymentRecordStatusResponseEnum.values()) {
 				paymentRecordStatusBO.setAtttribute(respProperty, (String)newObj.getString(respProperty.getRespKey()));
@@ -417,6 +424,7 @@ public class ChainConnector {
 					log.debug("failed response");
 				} 
 			}
+			asyncResponse.setRawJsonObject(newObj);
 			return asyncResponse;
 		} catch (IOException e) {
 			log.error(e.toString());
@@ -441,6 +449,7 @@ public class ChainConnector {
 			} else if(newObj.isEmpty()) {
 				return distributePaymentStatusBO;
 			}
+			distributePaymentStatusBO.setRawJSONObj(newObj);
 			//changes to the JSON response keys are maintained in the ResponseBO objects, use these keys to retrieve all available fields
 			for(DistributePaymentStatusResponseEnum respProperty : DistributePaymentStatusResponseEnum.values()) {
 				distributePaymentStatusBO.setAtttribute(respProperty, (String)newObj.getString(respProperty.getRespKey()));
@@ -475,7 +484,7 @@ public class ChainConnector {
 					log.debug("failed response");
 				} 
 			}
-			 
+			asyncResponse.setRawJsonObject(newObj);
 			return asyncResponse;
 		} catch (IOException e) {
 			log.error(e.toString());
@@ -499,7 +508,8 @@ public class ChainConnector {
 				return freezeOrUnfreezeStatusBO;
 			} else if(newObj.isEmpty()) {
 				return freezeOrUnfreezeStatusBO;
-			}			
+			}	
+			freezeOrUnfreezeStatusBO.setRawJSONObj(newObj);
 			//changes to the JSON response keys are maintained in the ResponseBO objects, use these keys to retrieve all available fields
 			for(FreezeOrUnfreezeStatusResponseEnum respProperty : FreezeOrUnfreezeStatusResponseEnum.values()) {
 				freezeOrUnfreezeStatusBO.setAtttribute(respProperty, (String)newObj.getString(respProperty.getRespKey()));
@@ -509,4 +519,5 @@ public class ChainConnector {
 		}
 		return null;
 	}
+	
 }

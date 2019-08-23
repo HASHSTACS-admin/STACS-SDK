@@ -3,6 +3,8 @@ package hashstacs.sdk.wallet;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.alibaba.fastjson.JSONObject;
+
 import hashstacs.sdk.response.txtype.IssuanceTxTypeBO;
 import hashstacs.sdk.response.txtype.PaymentRecordTypeBO;
 import hashstacs.sdk.response.txtype.SubscriptionTypeBO;
@@ -26,9 +28,14 @@ public class TxHistoryRecord {
 	
 	private String _rawRespCode;
 	private String _rawMsg;
+	private JSONObject _rawJsonObject;
 	
 	public TxHistoryRecord() {
 		
+	}
+	
+	public void setRawJsonObject(JSONObject obj) {
+		_rawJsonObject = obj;
 	}
 	
 	public void setIssueTxHist(List<IssuanceTxTypeBO> list) {

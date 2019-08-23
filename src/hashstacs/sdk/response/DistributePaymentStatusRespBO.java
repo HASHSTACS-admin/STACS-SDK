@@ -2,6 +2,8 @@ package hashstacs.sdk.response;
 
 import java.math.BigDecimal;
 
+import com.alibaba.fastjson.JSONObject;
+
 import hashstacs.sdk.util.StacsResponseEnums.DistributePaymentStatusResponseEnum;
 import lombok.Setter;
 
@@ -17,6 +19,7 @@ public class DistributePaymentStatusRespBO extends RespBO {
 	
 	private String _rawRespCode;
 	private String _rawMsg;
+	private JSONObject _rawJsonObject;
 	
 	public DistributePaymentStatusRespBO() {
 		
@@ -41,6 +44,9 @@ public class DistributePaymentStatusRespBO extends RespBO {
 	}
 	public String getRawMsg() {
 		return _rawMsg;
+	}
+	public JSONObject getRawJsonObject() {
+		return _rawJsonObject;
 	}
 	
 	private void setBlockHeight(String value) {
@@ -86,6 +92,10 @@ public class DistributePaymentStatusRespBO extends RespBO {
 	@Override
 	public void setRawMsg(String value) {
 		_rawMsg=value;
+	}
+	@Override
+	public void setRawJSONObj(Object value) {
+		_rawJsonObject = (JSONObject) value;
 	}
 
 }

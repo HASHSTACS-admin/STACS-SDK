@@ -1,5 +1,7 @@
 package hashstacs.sdk.response;
 
+import com.alibaba.fastjson.JSONObject;
+
 import hashstacs.sdk.util.StacsResponseEnums.GrantSubscribePermStatusResponseEnum;
 import lombok.Setter;
 
@@ -12,7 +14,8 @@ public class GrantSubscribePermStatusRespBO extends RespBO {
 	
 	private String _rawRespCode;
 	private String _rawMsg;
-
+	private JSONObject _rawJsonObject;
+	
 	public GrantSubscribePermStatusRespBO() {
 		
 	}
@@ -30,6 +33,9 @@ public class GrantSubscribePermStatusRespBO extends RespBO {
 	}
 	public String getRawMsg() {
 		return _rawMsg;
+	}
+	public JSONObject getRawJsonObject() {
+		return _rawJsonObject;
 	}
 	
 	private void setResultCode(String value) {
@@ -64,6 +70,10 @@ public class GrantSubscribePermStatusRespBO extends RespBO {
 	@Override
 	public void setRawMsg(String value) {
 		_rawMsg=value;
+	}
+	@Override
+	public void setRawJSONObj(Object value) {
+		_rawJsonObject = (JSONObject) value;
 	}
 
 }

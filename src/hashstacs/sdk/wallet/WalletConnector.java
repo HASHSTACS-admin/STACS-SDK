@@ -74,6 +74,7 @@ public class WalletConnector {
 					log.debug("failed response");
 				} 
 			}
+			asyncResponse.setRawJsonObject(newObj);
 			return asyncResponse;
 		} catch (IOException e) {
 			log.error(e.toString());
@@ -91,24 +92,25 @@ public class WalletConnector {
 		
 		CasDecryptReponse rawResponse;
 		//translate JSON response data into Java Object Types
-		WalletBalanceRespBO walletBalnceRespBO = new WalletBalanceRespBO();
+		WalletBalanceRespBO walletBalanceRespBO = new WalletBalanceRespBO();
 		try {
 			rawResponse = _wBaseConn.queryBalance(walletBalanceBO.get_origReqObj());
-			walletBalnceRespBO.setRawMsg(rawResponse.getMsg());
-			walletBalnceRespBO.setRawRespCode(rawResponse.getRespCode());
+			walletBalanceRespBO.setRawMsg(rawResponse.getMsg());
+			walletBalanceRespBO.setRawRespCode(rawResponse.getRespCode());
 			
 			JSONObject newObj = StacsUtil.getRespObject(rawResponse);
 			//ensure JSON object is not null or empty
 			if(newObj==null) {
-				return walletBalnceRespBO;
+				return walletBalanceRespBO;
 			} else if(newObj.isEmpty()) {
-				return walletBalnceRespBO;
+				return walletBalanceRespBO;
 			}
+			walletBalanceRespBO.setRawJSONObj(newObj);
 			//changes to the JSON response keys are maintained in the ResponseBO objects, use these keys to retrieve all available fields
 			for(WalletBalanceResponseEnum respProperty : WalletBalanceResponseEnum.values()) {
-				walletBalnceRespBO.setAtttribute(respProperty, (String)newObj.getString(respProperty.getRespKey()));
+				walletBalanceRespBO.setAtttribute(respProperty, (String)newObj.getString(respProperty.getRespKey()));
 			}
-			return walletBalnceRespBO;	
+			return walletBalanceRespBO;	
 		} catch (IOException e) {
 			log.error(e.toString());
 		}
@@ -139,6 +141,7 @@ public class WalletConnector {
 			} else if(newObj.isEmpty()) {
 				return transferTokenStatusBO;
 			}
+			transferTokenStatusBO.setRawJSONObj(newObj);
 			//changes to the JSON response keys are maintained in the ResponseBO objects, use these keys to retrieve all available fields
 			for(TransferTokenTypeBOEnum respProperty : TransferTokenTypeBOEnum.values()) {
 				transferTokenStatusBO.setAtttribute(respProperty, (String)newObj.getString(respProperty.getRespKey()));
@@ -174,6 +177,7 @@ public class WalletConnector {
 			} else if(newObj.isEmpty()) {
 				return txHist;
 			}
+			txHist.setRawJsonObject(newObj);
 			//this query returns 4 lists as of v1.0, to be extracted independently and stored in TxHistoryRecord			
 			for(WalletTokenTxHistoryResponseEnum respProperty : WalletTokenTxHistoryResponseEnum.values()) {
 				//for each type of list, get all the transaction rows and stored them into the List object

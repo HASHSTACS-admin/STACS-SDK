@@ -20,4 +20,9 @@ public abstract class RespBO {
 	public abstract void setRawRespCode(String value);
 	public abstract void setRawMsg(String value);
 	
+	/**
+	 * save the raw json values into the respBO object
+	 * @param value
+	 */
+	public abstract void setRawJSONObj(Object value);
 }

@@ -2,6 +2,8 @@ package hashstacs.sdk.response;
 
 import java.math.BigDecimal;
 
+import com.alibaba.fastjson.JSONObject;
+
 import hashstacs.sdk.util.TokenUnit;
 import hashstacs.sdk.util.StacsResponseEnums.WalletBalanceResponseEnum;
 
@@ -19,7 +21,8 @@ public class WalletBalanceRespBO extends RespBO {
 	
 	private String _rawRespCode;
 	private String _rawMsg;
-		
+	private JSONObject _rawJsonObject;
+	
 	public WalletBalanceRespBO() {
 		
 	}
@@ -41,6 +44,9 @@ public class WalletBalanceRespBO extends RespBO {
 	}
 	public String getRawMessage() {
 		return _rawMsg;
+	}
+	public JSONObject getRawJsonObject() {
+		return _rawJsonObject;
 	}
 	
 	/**
@@ -111,5 +117,10 @@ public class WalletBalanceRespBO extends RespBO {
 	@Override
 	public void setRawMsg(String value) {
 		_rawMsg=value;
+	}
+
+	@Override
+	public void setRawJSONObj(Object value) {
+		_rawJsonObject = (JSONObject) value;	
 	}
 }

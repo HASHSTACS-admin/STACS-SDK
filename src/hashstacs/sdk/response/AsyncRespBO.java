@@ -1,5 +1,7 @@
 package hashstacs.sdk.response;
 
+import com.alibaba.fastjson.JSONObject;
+
 import lombok.Getter;
 
 @Getter
@@ -7,11 +9,19 @@ public class AsyncRespBO {
 
 	private String _responseCode;
 	private String _txId;
-		
+	private JSONObject _rawJsonObject;
+	
 	public AsyncRespBO(String respCode, String txId) {
 		_responseCode=respCode;
 		_txId=txId;
 	}
+	public JSONObject getRawJsonObject() {
+		return _rawJsonObject;
+	}
+	public void setRawJsonObject(JSONObject value) {
+		_rawJsonObject=value;
+	}
+	
 	
 	/**
 	 * retrieves corresponding message to the response codes
@@ -44,6 +54,7 @@ public class AsyncRespBO {
 		SMART_CONTRACT_EXECUTION_FAILURE("SMART_CONTRACT_EXECUTION_FAILURE","200035"),//no permission or subscribe error
 		INSUFFICIENT_FUNDS("INSUFFICIENT_FUNDS","200036"),
 		INSUFFICIENT_FUNDS_FOR_DISTRIBUTION("INSUFFICIENT_FUNDS_FOR_DISTRIBUTION","200052"),
+		INVALID_TOKEN("INVALID_TOKEN","200054"),
 		UNFREEZE_FAILED("UNFREEZE_FAILED","300042"),
 		GRANT_PERMISSION_SUCCESS("GRANT_PERMISSION_SUCCESS","300050"),
 		GRANT_PERMISSION_VERIFIED_SUCCESS("GRANT_PERMISSION_VERIFIED_SUCCESS","300051")
