@@ -17,7 +17,7 @@ Reach out to the Solutions team at Hashstacs for questions! support@stacs.io
 ## 2. Available Smart Contracts
 These are smart contracts that are provided out-of-box with a standard STACS protocol deployment.
 
-This SDK provides both the DTO Object (a request Business Object, reqBO) containing parameters required for sending the API request as well as the actual method call to that fires off the REST request to the blockchain node.  
+This SDK provides both the DTO Object (a request Business Object, `reqBO`) containing parameters required for sending the API request as well as the actual method call to that fires off the REST request to the blockchain node.  
 
 The REST API response is captured as a Response DTO Object, respBO where the raw JSON string is stored while processing is done by the SDK to extract the JSON content into the Response object itself.
 
@@ -140,8 +140,8 @@ Java DTO Request Object | Java DTO Response Object | Method Call
 `TxHistoryReqBO` |` TxHistoryRespBO` | `WalletConnector.getTxHistoryForWalletAndOrCurrency` 
 
 ### Not covered in the SDK 
-Key management is not part of the SDK. For production use, it is encouraged that you use a KMS to manage the private keys used for signing and encrypting. 
-This does not include deployment of nodes for a STACS network.
+Keys are managed independently in this SDK and the encryption used is ECDSA. 
+This SDK does not include deployment of nodes for a STACS network.
 This SDK version also does not cover the deployment of new or updated smart contracts to a STACS network.  
 
 ## 3. Pre-requisites
@@ -170,6 +170,29 @@ Detailed examples for each smart contract function is provided in the `SampleUsa
 To begin, ensure you have Maven installed and run the Maven command:
 ```
 mvn clean compile install
+```
+
+#### 3.2 Simple Example - Issuing a token on the STACS network 
+
+A simple example for issuing a token can be found in the `ChainSampleUsage()` method in the `SampleUsage.java` main file.
+
+Comments are provided for each sample use that explain how the process is completed. The sample code for issuing a token is as follows below:
+
+```
+/**
+ *Issuing a token on a STACS Native network with the request object @IssueTokenReqBO and 
+ *receive the asynchronous response object @AsyncRespBO 
+ *
+ *Verify the request status with the @transaction_id as part of the request object and
+ *receive the response object @IssueTokenStatusRespBO
+ */
+IssueTokenSample issueTokenInfo = new IssueTokenSample(_sponsorWalletAddress,_tokenCustodyAddress,SAMPLE_TOKEN);
+IssueTokenReqBO issueTokenRequest = issueTokenInfo.getIssueRequest();
+AsyncRespBO issueTokenResponse = _chainConn.issueToken(issueTokenRequest, _sponsorSignKey);
+log.debug("Issued Token Request Transaction Id: " + issueTokenResponse.get_txId());
+Thread.sleep(StacsUtil.POLL_WAIT_TIME_IN_MS);
+IssueTokenStatusRespBO issueTokenStatus = _chainConn.getIssueTokenStatus(issueTokenResponse.get_txId());
+
 ```
 
 ### 3.2 Including this SDK into your own Java projects
