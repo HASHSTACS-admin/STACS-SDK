@@ -1,6 +1,6 @@
 package hashstacs.sdk.request;
 
-import com.hashstacs.client.bo.AddSubPrivilegeBO;
+import com.hashstacs.client.bo.StoPrivilegeBO;
 import com.hashstacs.sdk.crypto.GspECKey;
 
 import lombok.Getter;
@@ -15,10 +15,10 @@ public class GrantSubscribePermReqBO extends ReqBO {
 	private String _subscriberWalletAddress;
 	private String _txId;
 	
-	private AddSubPrivilegeBO _origReqObj;
+	private StoPrivilegeBO _origReqObj;
 	
 	public GrantSubscribePermReqBO() {
-		_origReqObj = new AddSubPrivilegeBO();
+		_origReqObj = new StoPrivilegeBO();
 		_origReqObj.setCallBackUrl("http://callback:7070");
 	}
 	

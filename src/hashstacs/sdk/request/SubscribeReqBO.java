@@ -33,7 +33,7 @@ public class SubscribeReqBO extends ReqBO {
 	public void setPayment(TokenUnit payment) {
 		_payment = payment;
 		_origReqObj.setCurrency(_payment.get_currency());
-		_origReqObj.setTokenAmount(_payment.get_amount());
+		_origReqObj.setTokenAmount(_payment.get_amount().toString());
 	}
 	
 	public void setMessage(String message) {

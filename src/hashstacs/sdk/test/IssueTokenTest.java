@@ -78,11 +78,11 @@ public class IssueTokenTest {
 	 * Check that a new token can be issued 
 	 * @throws InterruptedException
 	 */
-	
+	@Test
 	public void checkIssueNewToken() throws InterruptedException {
 	
 		AsyncRespBO issueTokenResponse = _chainConn.issueToken(_issueTokenReqBO, _sponsorSignKey);
-		
+		System.out.println(issueTokenResponse.get_txId());
 		assertTrue(issueTokenResponse.get_responseCode().compareTo(AsyncRespBO.asyncResponseCodesEnum.SUCCESS.getRespCode()) ==0);
 		Thread.sleep(StacsUtil.POLL_WAIT_TIME_IN_MS);
 		
@@ -152,7 +152,7 @@ public class IssueTokenTest {
 	/**
 	 * check that the signature validation is being done before being sent to the node
 	 */
-	@Test
+	//@Test
 	public void checkTokenValidationSignature() {
 		AsyncRespBO issueTokenResponse = _chainConn.issueToken(_issueTokenReqBO, _issuerSignKey);
 		assertNull(issueTokenResponse);

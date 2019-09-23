@@ -16,7 +16,7 @@
 			<attribute name="maven.pomderived" value="true"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="lib/stacs-bm-1.0.0.jar"/>
-	<classpathentry kind="lib" path="lib/stacs-base-1.0.0.jar"/>
+	<classpathentry kind="lib" path="C:/Users/serfa/git/SDK/lib/stacs-base-2.1.0.jar"/>
+	<classpathentry kind="lib" path="C:/Users/serfa/git/SDK/lib/stacs-bm-2.1.1.jar"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>

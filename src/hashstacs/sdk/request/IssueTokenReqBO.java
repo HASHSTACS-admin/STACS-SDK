@@ -6,6 +6,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.TimeZone;
 
+import com.hashstacs.client.bo.ContractEnum;
 import com.hashstacs.client.bo.IssueCoinRequestBO;
 import com.hashstacs.sdk.crypto.GspECKey;
 
@@ -47,6 +48,7 @@ public class IssueTokenReqBO extends ReqBO {
 		_tokenAndTotalSupply = tokenAndTotalSupply;
 		_origReqObj = new IssueCoinRequestBO();
 		_origReqObj.setCurrency(_tokenAndTotalSupply.get_currency());
+		_origReqObj.setCurrencyName(_tokenAndTotalSupply.get_currency());//
 		_origReqObj.setVersion("1.0.0");
 		_origReqObj.setAmount(_tokenAndTotalSupply.get_amount().toString());
 	}
@@ -81,12 +83,15 @@ public class IssueTokenReqBO extends ReqBO {
 	}
 	public void setTokenType(TokenTypeEnum value) {
 		_tokenType=value;
-		_origReqObj.setType(_tokenType.toString());
+		
 		if(value==TokenTypeEnum.STABLE) {
-			_origReqObj.setIsStable(true);
+			//_origReqObj.setIsStable(true);
+			_origReqObj.setContractType(ContractEnum.STABLE_TOKEN.getType());//
 		}
 		else {
-			_origReqObj.setIsStable(false);
+			//_origReqObj.setIsStable(false);
+			_origReqObj.setType(_tokenType.toString());
+			_origReqObj.setContractType(ContractEnum.CENTRALIZED_STO.getType());//
 		}
 	}
 	public void setMaxSubscriptionLots(int numOfLots) {
@@ -235,11 +240,17 @@ public class IssueTokenReqBO extends ReqBO {
 	}
 	
 	public enum TokenTypeEnum {
-		OPEN_ENDED_FUND,
-		BONDS,
-		STOCKS,
-		STABLE
+		OPEN_ENDED_FUND("OPEN_ENDED_FUND"),
+		BONDS("BONDS"),
+		STOCKS("STOCKS"),
+		STABLE("STABLE")
 		;
+		
+		private String stringValue;
+		
+		TokenTypeEnum(String stringValue) {
+			this.stringValue = stringValue;
+		}
 	
 	}
 

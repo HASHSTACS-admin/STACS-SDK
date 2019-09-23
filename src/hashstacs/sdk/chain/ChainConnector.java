@@ -350,7 +350,7 @@ public class ChainConnector {
 		String txId = paymentRecordBO.getTxId();
 		CasDecryptReponse rawResponse;
 		try {
-			rawResponse = _bcBaseConn.settlRequest(txId);
+			rawResponse = _bcBaseConn.snapshotRequest(txId);
 			AsyncRespBO asyncResponse = new AsyncRespBO(rawResponse.getRespCode(),txId);
 			
 			JSONObject newObj = StacsUtil.getRespObject(rawResponse);
@@ -378,7 +378,7 @@ public class ChainConnector {
 		//translate JSON response data into Java Object Types
 		GeneratePaymentRecordRespBO paymentRecordStatusBO = new GeneratePaymentRecordRespBO();
 		try {
-			rawResponse = _bcBaseConn.settlRequestQuery(txId);
+			rawResponse = _bcBaseConn.snapshotRequestQuery(txId);
 			paymentRecordStatusBO.set_rawMsg(rawResponse.getMsg());
 			paymentRecordStatusBO.set_rawRespCode(rawResponse.getRespCode());
 			

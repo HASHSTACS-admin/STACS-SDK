@@ -175,7 +175,7 @@ public class StacsResponseEnums {
 		BLOCK_HEIGHT("BLOCK_HEIGHT","blockHeight"),
 		REQ_CREATE_TIME("REQ_CREATE_TIME","createTime"),
 		CURRENCY("CURRENCY","currency"),
-		DATA("DATA","data"),
+		DATA("DATA","data"),//not in use
 		TX_FEE("TX_FEE","fee"),
 		FROM_ADDR("FROM_ADDR","fromAddr"),
 		RANDOM_NUM("RANDOM_NUM","randomNum"),
@@ -329,7 +329,7 @@ public class StacsResponseEnums {
 	
 	public enum PaymentRecordStatusResponseEnum {
 		BLOCK_HEIGHT("BLOCK_HEIGHT","height"),
-		TXID("TXID","settlId"),
+		TXID("TXID","snapshotId"),
 		STATUS("STATUS","status")
 		//NEW_FIELD("NEW_FIELD","case-sensitive-key-here")
 		;

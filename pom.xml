@@ -2,7 +2,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>stacs-sdk</groupId>
   <artifactId>stacs-sdk</artifactId>
-  <version>1.0.5</version>
+  <version>1.0.6</version>
   <packaging>jar</packaging>
   
    <properties>
@@ -35,12 +35,12 @@
   	<dependency>
   		<groupId>com.hashstacs</groupId>
   		<artifactId>stacs-base</artifactId>
-  		<version>1.0.0</version>
+  		<version>2.1.0</version>
   	</dependency>
   	<dependency>
   		<groupId>com.hashstacs.client</groupId>
   		<artifactId>stacs-bm</artifactId>
-  		<version>1.0.0</version>
+  		<version>2.1.1</version>
   	</dependency>
   	<dependency>
 	    <groupId>junit</groupId>
@@ -88,11 +88,11 @@
                         <id>install-external-base</id>
                         <phase>clean</phase>
                         <configuration>
-                            <file>${basedir}/lib/stacs-base-1.0.0.jar</file>
+                            <file>${basedir}/lib/stacs-base-2.1.0.jar</file>
                             <repositoryLayout>default</repositoryLayout>
                             <groupId>com.hashstacs</groupId>
                             <artifactId>stacs-base</artifactId>
-                            <version>1.0.0</version>
+                            <version>2.1.0</version>
                             <packaging>jar</packaging>
                             <generatePom>true</generatePom>
                         </configuration>
@@ -104,11 +104,11 @@
                         <id>install-external-bm</id>
                         <phase>clean</phase>
                         <configuration>
-                            <file>${basedir}/lib/stacs-bm-1.0.0.jar</file>
+                            <file>${basedir}/lib/stacs-bm-2.1.1.jar</file>
                             <repositoryLayout>default</repositoryLayout>
                             <groupId>com.hashstacs.client</groupId>
                             <artifactId>stacs-bm</artifactId>
-                            <version>1.0.0</version>
+                            <version>2.1.1</version>
                             <packaging>jar</packaging>
                             <generatePom>true</generatePom>
                         </configuration>

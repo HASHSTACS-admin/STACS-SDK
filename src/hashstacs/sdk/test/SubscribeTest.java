@@ -64,7 +64,7 @@ public class SubscribeTest {
 
 	//generate a token for the day to test
 	private static final DateFormat DATE_FORMAT = new SimpleDateFormat("yyyyMMdd");
-	private static final String TEST_TOKEN = "TOKENSUB" + DATE_FORMAT.format(System.currentTimeMillis());
+	private static final String TEST_TOKEN = "TOK" + DATE_FORMAT.format(System.currentTimeMillis());
 	
 	/**
 	 * Initialize all parameters for the test
