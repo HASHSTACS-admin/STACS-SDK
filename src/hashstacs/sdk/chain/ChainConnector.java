@@ -1,6 +1,8 @@
 package hashstacs.sdk.chain;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
@@ -12,6 +14,7 @@ import com.hashstacs.sdk.wallet.dock.bo.CasDecryptReponse;
 import hashstacs.sdk.request.DistributePaymentReqBO;
 import hashstacs.sdk.request.FreezeWalletReqBO;
 import hashstacs.sdk.request.GeneratePaymentRecordReqBO;
+import hashstacs.sdk.request.GetTokenHoldersReqBO;
 import hashstacs.sdk.request.GrantSubscribePermReqBO;
 import hashstacs.sdk.request.IssueTokenReqBO;
 import hashstacs.sdk.request.SubscribeReqBO;
@@ -20,13 +23,17 @@ import hashstacs.sdk.response.AsyncRespBO;
 import hashstacs.sdk.response.DistributePaymentStatusRespBO;
 import hashstacs.sdk.response.FreezeOrUnfreezeStatusRespBO;
 import hashstacs.sdk.response.GeneratePaymentRecordRespBO;
+import hashstacs.sdk.response.GetTokenHoldersRespBO;
 import hashstacs.sdk.response.GrantSubscribePermStatusRespBO;
 import hashstacs.sdk.response.IssueTokenStatusRespBO;
 import hashstacs.sdk.response.LatestBlockRespBO;
 import hashstacs.sdk.response.SubscribeStatusRespBO;
+import hashstacs.sdk.response.txtype.TokenHoldersTypeBO;
 import hashstacs.sdk.util.StacsUtil;
 import hashstacs.sdk.util.StacsResponseEnums.DistributePaymentStatusResponseEnum;
 import hashstacs.sdk.util.StacsResponseEnums.FreezeOrUnfreezeStatusResponseEnum;
+import hashstacs.sdk.util.StacsResponseEnums.GetTokenHoldersParentJsonEnum;
+import hashstacs.sdk.util.StacsResponseEnums.GetTokenHoldersResponseEnum;
 import hashstacs.sdk.util.StacsResponseEnums.GrantSubscribePermStatusResponseEnum;
 import hashstacs.sdk.util.StacsResponseEnums.IssueTokenStatusResponseEnum;
 import hashstacs.sdk.util.StacsResponseEnums.LatestBlockResponseEnum;
@@ -371,6 +378,41 @@ public class ChainConnector {
 		}
 		AsyncRespBO failedAsyncResponse = new AsyncRespBO(AsyncRespBO.asyncResponseCodesEnum.FAILED_QUERY.getRespCode(),txId);
 		return failedAsyncResponse;
+	}
+	
+	public GetTokenHoldersRespBO getTokenHolders(GetTokenHoldersReqBO reqBO) {
+		CasDecryptReponse rawResponse;
+		GetTokenHoldersRespBO tokenHoldersResponseBO = new GetTokenHoldersRespBO();
+		
+		try {
+			rawResponse = _bcBaseConn.snapshotQuery(reqBO.get_origReqObj());
+			tokenHoldersResponseBO.setRawMsg(rawResponse.getMsg());
+			tokenHoldersResponseBO.setRawRespCode(rawResponse.getRespCode());
+			
+			JSONObject newObj = StacsUtil.getRespObject(rawResponse);
+			//ensure JSON object is not null or empty
+			if(newObj==null) {
+				return tokenHoldersResponseBO;
+			}else if(newObj.isEmpty()) {
+				return tokenHoldersResponseBO;
+			}
+			tokenHoldersResponseBO.setRawJSONObj(newObj);
+			JSONArray list = StacsUtil.getWalletHoldersList(newObj,GetTokenHoldersParentJsonEnum.TOKEN_HOLDER_PARENT.getRespKey());
+			//go through list of all token holders
+			for(int i=0;i<list.size();i++) {
+				JSONObject holder = list.getJSONObject(i);
+				TokenHoldersTypeBO tokenHolder = new TokenHoldersTypeBO();
+				//changes to the JSON response keys are maintained in the ResponseBO objects, use these keys to retrieve all available fields
+				for(GetTokenHoldersResponseEnum respProperty : GetTokenHoldersResponseEnum.values()) {								
+					tokenHolder.setAtttribute(respProperty, (String)holder.getString(respProperty.getRespKey()));	
+				}
+				tokenHoldersResponseBO.appendToTokenHolderRecord(tokenHolder);
+			}
+			return tokenHoldersResponseBO;
+		} catch (IOException e) {
+			
+		}
+		return null;
 	}
 	
 	public GeneratePaymentRecordRespBO getPaymentRecordStatus(String txId) {

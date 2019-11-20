@@ -282,6 +282,7 @@ public class IssuanceTxTypeBO extends RespBO {
 			break;
 		case CREATE_TIME:
 			setCreateTime(attrValue);
+			break;
 		case TOKEN_CODE:
 			set_tokenCode(attrValue);
 			break;
@@ -377,5 +378,8 @@ public class IssuanceTxTypeBO extends RespBO {
 	public void setRawJSONObj(Object value) {
 		_rawJsonObject = (JSONObject) value;
 	}
-	
+
+	public String getBizModel() {
+		return _bizModel;
+	}
 }

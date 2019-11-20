@@ -5,7 +5,7 @@ import com.hashstacs.sdk.crypto.GspECKey;
 public class GeneratePaymentRecordReqBO extends ReqBO {
 
 	private String _txId;
-	private final String PAYMENT_RECORD_ATTRIBUTE = "settlRequest";
+	private final String PAYMENT_RECORD_ATTRIBUTE = "snapshot";//"settlRequest";
 	
 	public GeneratePaymentRecordReqBO() {
 		_txId = GspECKey.generate64TxId(PAYMENT_RECORD_ATTRIBUTE + System.currentTimeMillis());

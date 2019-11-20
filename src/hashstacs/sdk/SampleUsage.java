@@ -1,5 +1,6 @@
 package hashstacs.sdk;
 
+import java.io.IOException;
 import java.math.BigDecimal;
 
 import org.spongycastle.util.encoders.Hex;
@@ -9,6 +10,7 @@ import hashstacs.sdk.chain.ChainConnector;
 import hashstacs.sdk.request.DistributePaymentReqBO;
 import hashstacs.sdk.request.FreezeWalletReqBO;
 import hashstacs.sdk.request.GeneratePaymentRecordReqBO;
+import hashstacs.sdk.request.GetTokenHoldersReqBO;
 import hashstacs.sdk.request.GrantSubscribePermReqBO;
 import hashstacs.sdk.request.IssueTokenReqBO;
 import hashstacs.sdk.request.SubscribeReqBO;
@@ -20,6 +22,7 @@ import hashstacs.sdk.response.AsyncRespBO;
 import hashstacs.sdk.response.DistributePaymentStatusRespBO;
 import hashstacs.sdk.response.FreezeOrUnfreezeStatusRespBO;
 import hashstacs.sdk.response.GeneratePaymentRecordRespBO;
+import hashstacs.sdk.response.GetTokenHoldersRespBO;
 import hashstacs.sdk.response.GrantSubscribePermStatusRespBO;
 import hashstacs.sdk.response.IssueTokenStatusRespBO;
 import hashstacs.sdk.response.LatestBlockRespBO;
@@ -46,29 +49,31 @@ public class SampleUsage {
 	
 	private static GspECKey _sponsorSignKey;
 	private static String _sponsorWalletAddress;
+	
 	private static GspECKey _issuerSignKey;
 	private static String _tokenCustodyAddress;
+	
 	private static GspECKey _investorSignKey;
 	private static String _investorWalletAddress;
 	private static GspECKey _freezeKey;
 	private static String _freezeKeyAddress;
 	
 	private static String SAMPLE_TOKEN = "BOND2019";
-	private static String CONFIG_PROPERTIES = "config.properties";
+	private static String CONFIG_PROPERTIES = "configv.properties";
 	
-	public static void main(String[] args)  {
+	public static void main(String[] args) throws IOException  {
 	
 		//initializes variables for sample data
 		initialize();
 		
 		//contains all chain functions and sample data of using them
 		//ChainSampleUsage();
-		
+
 		//contains all wallet functions and sample data of using them
 		//WalletSampleUsage();
 		
 		//Creates a public/private key pair and an address, prints to line
-		StacsUtil.createWallet();
+		//StacsUtil.createWallet();
 		
 	}
 	
@@ -153,12 +158,19 @@ public class SampleUsage {
 		 *
 		 *Verify the request status with the @transaction_id as part of the request object and
 		 *receive the response object @GeneratePaymentRecordRespBO
+		 *
+		 *Get the list of token holders based on the payment record (blockheight and datetime)
+		 *with the request object @GetTokenHoldersReqBO and 
+		 *receive the asynchronous response object @GetTokenHoldersRespBO
 		 */
 		GeneratePaymentRecordReqBO paymentRecordRequest = new GeneratePaymentRecordReqBO();
 		AsyncRespBO paymentRecordResponse = _chainConn.generatePaymentRecord(paymentRecordRequest, _sponsorSignKey);
 		log.debug("payment record request Transaction Id:" + paymentRecordResponse.get_txId());
 		Thread.sleep(StacsUtil.POLL_WAIT_TIME_IN_MS);
 		GeneratePaymentRecordRespBO payRecordStatus = _chainConn.getPaymentRecordStatus(paymentRecordResponse.get_txId());
+		Thread.sleep(StacsUtil.POLL_WAIT_TIME_IN_MS);
+		GetTokenHoldersReqBO tokenHolders = new GetTokenHoldersReqBO(paymentRecordResponse.get_txId(),SAMPLE_TOKEN);
+		GetTokenHoldersRespBO tokenHoldersResp = _chainConn.getTokenHolders(tokenHolders);
 		
 		/**
 		 *Sponsor distributes payments to investor wallet addresses 
@@ -174,7 +186,7 @@ public class SampleUsage {
 		log.debug("distribute payment request Transaction id: " + distributePaymentResponse.get_txId());
 		Thread.sleep(StacsUtil.POLL_WAIT_TIME_IN_MS);
 		DistributePaymentStatusRespBO distributePaymentStatus = _chainConn.getDistributePaymentStatus(distributePaymentResponse.get_txId());		
-
+		
 		/**
 		 *Freeze or Unfreeze either all tokens, all stable coins or both in a wallet address
 		 *with the request object @FreezeWalletReqBO and 

@@ -350,6 +350,46 @@ public class StacsResponseEnums {
 		}
 	}
 	
+	public enum GetTokenHoldersParentJsonEnum {
+		TOKEN_HOLDER_PARENT("TOKEN_HOLDER_PARENT","details")
+		;
+		private final String _respProperty;
+		private final String _respKey;
+		
+		GetTokenHoldersParentJsonEnum(String key, String value) {
+			this._respProperty = key;
+			this._respKey = value;
+		}
+		
+		public String getRespProperty() {
+			return _respProperty;
+		}
+		public String getRespKey() {
+			return _respKey;
+		}
+	}
+	
+	public enum GetTokenHoldersResponseEnum {
+		
+		WALLET_ADDRESS("WALLET_ADDRESS","address"),
+		AMOUNT("AMOUNT","amount")
+		;
+		private final String _respProperty;
+		private final String _respKey;
+		
+		GetTokenHoldersResponseEnum(String key, String value) {
+			this._respProperty = key;
+			this._respKey = value;
+		}
+		
+		public String getRespProperty() {
+			return _respProperty;
+		}
+		public String getRespKey() {
+			return _respKey;
+		}
+	}
+	
 	public enum DistributePaymentStatusResponseEnum {
 		BLOCK_HEIGHT("BLOCK_HEIGHT","height"),
 		MESSAGE("MESSAGE","msg"),
