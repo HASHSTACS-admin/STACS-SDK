@@ -6,9 +6,9 @@ import java.util.List;
 import com.alibaba.fastjson.JSONObject;
 
 import hashstacs.sdk.response.txtype.TokenHoldersTypeBO;
-import lombok.Getter;
+import lombok.Setter;
 
-@Getter
+@Setter
 public class GetTokenHoldersRespBO extends RespBO {
 
 	private List<TokenHoldersTypeBO> _tokenHolderRecord = new ArrayList<>();
@@ -23,6 +23,21 @@ public class GetTokenHoldersRespBO extends RespBO {
 	
 	public GetTokenHoldersRespBO(List<TokenHoldersTypeBO> tokenHolderRecord) {
 		_tokenHolderRecord = tokenHolderRecord;
+	}
+	
+	public List<TokenHoldersTypeBO> getTokenHolders() {
+		return _tokenHolderRecord;
+	}
+	
+	public String getRawRespCode() {
+		return _rawRespCode;
+	}
+	public String getRawMsg() {
+		return _rawMsg;
+	}
+	
+	public JSONObject getRawJsonObject() {
+		return _rawJsonObject;
 	}
 	
 	public void appendToTokenHolderRecord(List<TokenHoldersTypeBO> additionalRecords) {

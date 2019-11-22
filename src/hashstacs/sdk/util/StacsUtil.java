@@ -200,6 +200,14 @@ public class StacsUtil {
 		return JSONObject.parseObject((String)rawResponse.getData());
 	}
 	
+	public static JSONArray getWalletHoldersList(JSONObject newObj, String key) {
+		String walletHolderListString = newObj.getString(key);
+		JSONArray walletHolderList = JSONObject.parseArray(walletHolderListString);
+		
+		return walletHolderList;
+	}
+	
+	
 	/**
 	 * returns a JSONArray object from a JSONObject based on keys from the Enum input
 	 * @param newObj

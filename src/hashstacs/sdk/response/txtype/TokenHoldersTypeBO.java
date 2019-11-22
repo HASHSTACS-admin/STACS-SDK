@@ -4,9 +4,9 @@ import com.alibaba.fastjson.JSONObject;
 
 import hashstacs.sdk.response.RespBO;
 import hashstacs.sdk.util.StacsResponseEnums.GetTokenHoldersResponseEnum;
-import lombok.Setter;
+import lombok.Getter;
 
-@Setter
+@Getter
 public class TokenHoldersTypeBO extends RespBO {
 
 	private String _walletAddress;
@@ -29,6 +29,7 @@ public class TokenHoldersTypeBO extends RespBO {
 			break;
 		case AMOUNT:
 			setAmount(attrValue);
+			break;
 		}
 
 	}

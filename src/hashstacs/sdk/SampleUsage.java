@@ -8,6 +8,7 @@ import com.hashstacs.sdk.crypto.GspECKey;
 
 import hashstacs.sdk.chain.ChainConnector;
 import hashstacs.sdk.request.DistributePaymentReqBO;
+import hashstacs.sdk.request.FreezeTokensForRedemptionReqBO;
 import hashstacs.sdk.request.FreezeWalletReqBO;
 import hashstacs.sdk.request.GeneratePaymentRecordReqBO;
 import hashstacs.sdk.request.GetTokenHoldersReqBO;
@@ -21,11 +22,13 @@ import hashstacs.sdk.request.WalletBalanceReqBO;
 import hashstacs.sdk.response.AsyncRespBO;
 import hashstacs.sdk.response.DistributePaymentStatusRespBO;
 import hashstacs.sdk.response.FreezeOrUnfreezeStatusRespBO;
+import hashstacs.sdk.response.FreezeTokensForRedemptionRespBO;
 import hashstacs.sdk.response.GeneratePaymentRecordRespBO;
 import hashstacs.sdk.response.GetTokenHoldersRespBO;
 import hashstacs.sdk.response.GrantSubscribePermStatusRespBO;
 import hashstacs.sdk.response.IssueTokenStatusRespBO;
 import hashstacs.sdk.response.LatestBlockRespBO;
+import hashstacs.sdk.response.RedeemTokenRespBO;
 import hashstacs.sdk.response.SubscribeStatusRespBO;
 import hashstacs.sdk.response.TransferTokenStatusRespBO;
 import hashstacs.sdk.response.TxHistoryRespBO;
@@ -59,13 +62,12 @@ public class SampleUsage {
 	private static String _freezeKeyAddress;
 	
 	private static String SAMPLE_TOKEN = "BOND2019";
-	private static String CONFIG_PROPERTIES = "configv.properties";
+	private static String CONFIG_PROPERTIES = "config.properties";
 	
-	public static void main(String[] args) throws IOException  {
+	public static void main(String[] args) throws IOException, InterruptedException  {
 	
 		//initializes variables for sample data
 		initialize();
-		
 		//contains all chain functions and sample data of using them
 		//ChainSampleUsage();
 
@@ -180,12 +182,57 @@ public class SampleUsage {
 		 *Verify the request status with the @transaction_id as part of the request object and
 		 *receive the response object @DistributePaymentStatusRespBO
 		 */
-		DistributePaymentsSample distributePayment = new DistributePaymentsSample("USD",_sponsorWalletAddress,SAMPLE_TOKEN,paymentRecordResponse.get_txId());
+		DistributePaymentsSample distributePayment = new DistributePaymentsSample("USD",_tokenCustodyAddress,SAMPLE_TOKEN,paymentRecordResponse.get_txId(), tokenHoldersResp);
 		DistributePaymentReqBO distributePaymentRequest = distributePayment.getDistributePaymentRequest();
-		AsyncRespBO distributePaymentResponse = _chainConn.distributePayment(distributePaymentRequest, _sponsorSignKey);
+		AsyncRespBO distributePaymentResponse = _chainConn.distributePayment(distributePaymentRequest, _issuerSignKey);
 		log.debug("distribute payment request Transaction id: " + distributePaymentResponse.get_txId());
 		Thread.sleep(StacsUtil.POLL_WAIT_TIME_IN_MS);
 		DistributePaymentStatusRespBO distributePaymentStatus = _chainConn.getDistributePaymentStatus(distributePaymentResponse.get_txId());		
+		
+		/**
+		 * Sponsor redeems the token by retrieving all tokens held by all investors
+		 * back to their wallet account. In return, the sponsor will pay each investor
+		 * based on the amount of tokens held. 
+		 * 
+		 * This redemption action is a 4-step process:
+		 * 1. Create a Payment Record with the request object @GeneratePaymentRecordReqBO and 
+		 *	  receive the asynchronous response object @AsyncRespBO. Verify the request status 
+		 *	  with the @transaction_id as part of the request object and 
+		 *	  receive the response object @GeneratePaymentRecordRespBO
+		 *
+		 *2. Get the list of token holders based on the payment record with the 
+		 *	 request object @GetTokenHoldersReqBO and receive the asynchronous 
+		 *   response object @GetTokenHoldersRespBO. 
+		 *   
+		 *3. Freeze all tokens with the request object @FreezeTokensForRedemptionReqBO and 
+		 *	 receive the asynchronous response object @FreezeTokensForRedemptionRespBO. 
+		 * 
+		 *4. Redeem the tokens (retrieval of tokens and payout happens simultaneously and atomically) by
+		 *	 sending the request object @RedeemTokenReqBO and receive the response object 
+		 *	 @RedeemTokenRespBO. Verify the redemption status with the @transaction_id as part of the
+		 *   request object and receive the response object @RedeemTokenRespBO
+		 */
+		
+		//Step 1: generate payment record to establish blockheight and datetime
+		GeneratePaymentRecordReqBO paymentRecordRedeemRequest = new GeneratePaymentRecordReqBO();
+		AsyncRespBO paymentRecordRedeemResponse = _chainConn.generatePaymentRecord(paymentRecordRedeemRequest, _sponsorSignKey);
+		log.debug("payment record redeem request Transaction Id:" + paymentRecordRedeemResponse.get_txId());
+		Thread.sleep(StacsUtil.POLL_WAIT_TIME_IN_MS);
+		GeneratePaymentRecordRespBO payRecordRedeemStatus = _chainConn.getPaymentRecordStatus(paymentRecordRedeemResponse.get_txId());
+		//Step 2: Get list of token holders
+		GetTokenHoldersReqBO redeemTokenHolders = new GetTokenHoldersReqBO(paymentRecordRedeemResponse.get_txId(),SAMPLE_TOKEN);
+		GetTokenHoldersRespBO redeemTokenHoldersResp = _chainConn.getTokenHolders(redeemTokenHolders);
+		//Step 3: Freezing tokens
+		FreezeTokensForRedemptionReqBO freezeRedeemBO = new FreezeTokensForRedemptionReqBO(_sponsorWalletAddress, SAMPLE_TOKEN);
+		AsyncRespBO freezeRedeemReq = _chainConn.freezeTokensForRedemption(freezeRedeemBO, _sponsorSignKey);
+		Thread.sleep(StacsUtil.POLL_WAIT_TIME_IN_MS);
+		FreezeTokensForRedemptionRespBO freezeRedeemResp = _chainConn.getFreezeTokensForRedemptionStatus(freezeRedeemReq.get_txId());
+		//Step 4: Atomic Redemption
+		RedemptionSample redeem = new RedemptionSample("USD",_tokenCustodyAddress,paymentRecordRedeemResponse.get_txId(),SAMPLE_TOKEN,tokenHoldersResp);
+		AsyncRespBO redeemReq = _chainConn.redeemTokens(redeem.getRedemptionRequest(), _issuerSignKey);
+		Thread.sleep(StacsUtil.POLL_WAIT_TIME_IN_MS);
+		RedeemTokenRespBO redeemStatus = _chainConn.getRedeemTokenStatus(redeemReq.get_txId());
+		
 		
 		/**
 		 *Freeze or Unfreeze either all tokens, all stable coins or both in a wallet address

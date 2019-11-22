@@ -1,10 +1,8 @@
 package hashstacs.sdk.request;
 
 import com.hashstacs.client.bo.SnapshotQueryRequest;
-import com.hashstacs.client.bo.SubscribeBO;
 import com.hashstacs.sdk.crypto.GspECKey;
 
-import hashstacs.sdk.util.TokenUnit;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 

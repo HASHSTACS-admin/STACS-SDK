@@ -390,6 +390,104 @@ public class StacsResponseEnums {
 		}
 	}
 	
+	public enum FreezeTokensForRedemptionResponseEnum {
+		BLOCK_HEIGHT("BLOCK_HEIGHT","height"),
+		TXID("TXID","txId"),
+		STATUS("STATUS","status"),
+		MESSAGE("MESSAGE","message")
+		;
+		private final String _respProperty;
+		private final String _respKey;
+		
+		FreezeTokensForRedemptionResponseEnum(String key, String value) {
+			this._respProperty = key;
+			this._respKey = value;
+		}
+		
+		public String getRespProperty() {
+			return _respProperty;
+		}
+		public String getRespKey() {
+			return _respKey;
+		}
+	}
+	
+	public enum RedemptionRecipientDetailsResponseEnum {
+		RECIPIENT_WALLET_ADDRESS("RECIPIENT_WALLET_ADDRESS","address"),
+		TOKEN_QUANTITY("TOKEN_QUANTITY","amount"),
+		PAYMENT_AMOUNT("PAYMENT_AMOUNT","payAmount")
+		//NEW_FIELD("NEW_FIELD","case-sensitive-key-here")
+		;
+		
+		private final String _respProperty;
+		private final String _respKey;
+		
+		RedemptionRecipientDetailsResponseEnum(String key, String value) {
+			this._respProperty = key;
+			this._respKey = value;
+		}
+		
+		public String getRespProperty() {
+			return _respProperty;
+		}
+		public String getRespKey() {
+			return _respKey;
+		}
+	}
+	/*
+	public enum RedeemTokenResponseEnum {
+		TX_ID("TX_ID","txId"),
+		REDEMPTION_ADDRESS("REDEMPTION_ADDRESS","buybackAddr"),
+		PAYMENT_ADDRESS("PAYMENT_ADDRESS","payAddr"),
+		TOTAL_PAYMENT_CURRENCY("TOTAL_PAYMENT_CURRENCY","payCurrency"),
+		TOTAL_PAYMENT_AMOUNT("TOTAL_PAYMENT_AMOUNT","totalPayAmount"),
+		TOKEN_CODE("TOKEN_CODE","tokenSymbol"),
+		TOTAL_REDEEMED_TOKEN_QUANTITY("TOTAL_REDEEMED_TOKEN_QUANTITY","totalAmount"),
+		NUM_OF_RECIPIENTS("NUM_OF_RECIPIENTS","size"),
+		PAYMENT_RECORD_ID("PAYMENT_RECORD_ID","snapshotId")
+		//NEW_FIELD("NEW_FIELD","case-sensitive-key-here")
+		;
+		
+		private final String _respProperty;
+		private final String _respKey;
+		
+		RedeemTokenResponseEnum(String key, String value) {
+			this._respProperty = key;
+			this._respKey = value;
+		}
+		
+		public String getRespProperty() {
+			return _respProperty;
+		}
+		public String getRespKey() {
+			return _respKey;
+		}
+	}*/
+	
+	public enum RedeemTokenResponseEnum {
+		BLOCK_HEIGHT("BLOCK_HEIGHT","height"),
+		TXID("TXID","txId"),
+		STATUS("STATUS","status"),
+		ERROR_MESSAGE("ERROR_MESSAGE","msg"),
+		TOTAL_TOKEN_QTY("TOTAL_TOKEN_QTY","totalAmount"),
+		TOTAL_PAYMENT_AMOUNT("TOTAL_PAYMENT_AMOUNT","totalPayAmount")
+		;
+		private final String _respProperty;
+		private final String _respKey;
+		
+		RedeemTokenResponseEnum(String key, String value) {
+			this._respProperty = key;
+			this._respKey = value;
+		}
+		
+		public String getRespProperty() {
+			return _respProperty;
+		}
+		public String getRespKey() {
+			return _respKey;
+		}
+	}
+	
 	public enum DistributePaymentStatusResponseEnum {
 		BLOCK_HEIGHT("BLOCK_HEIGHT","height"),
 		MESSAGE("MESSAGE","msg"),

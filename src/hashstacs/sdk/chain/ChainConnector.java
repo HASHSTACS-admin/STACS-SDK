@@ -1,8 +1,6 @@
 package hashstacs.sdk.chain;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
@@ -12,32 +10,38 @@ import com.hashstacs.sdk.crypto.GspECKey;
 import com.hashstacs.sdk.wallet.dock.bo.CasDecryptReponse;
 
 import hashstacs.sdk.request.DistributePaymentReqBO;
+import hashstacs.sdk.request.FreezeTokensForRedemptionReqBO;
 import hashstacs.sdk.request.FreezeWalletReqBO;
 import hashstacs.sdk.request.GeneratePaymentRecordReqBO;
 import hashstacs.sdk.request.GetTokenHoldersReqBO;
 import hashstacs.sdk.request.GrantSubscribePermReqBO;
 import hashstacs.sdk.request.IssueTokenReqBO;
+import hashstacs.sdk.request.RedeemTokenReqBO;
 import hashstacs.sdk.request.SubscribeReqBO;
 import hashstacs.sdk.request.TxHistoryBetweenBlocksReqBO;
 import hashstacs.sdk.response.AsyncRespBO;
 import hashstacs.sdk.response.DistributePaymentStatusRespBO;
 import hashstacs.sdk.response.FreezeOrUnfreezeStatusRespBO;
+import hashstacs.sdk.response.FreezeTokensForRedemptionRespBO;
 import hashstacs.sdk.response.GeneratePaymentRecordRespBO;
 import hashstacs.sdk.response.GetTokenHoldersRespBO;
 import hashstacs.sdk.response.GrantSubscribePermStatusRespBO;
 import hashstacs.sdk.response.IssueTokenStatusRespBO;
 import hashstacs.sdk.response.LatestBlockRespBO;
+import hashstacs.sdk.response.RedeemTokenRespBO;
 import hashstacs.sdk.response.SubscribeStatusRespBO;
 import hashstacs.sdk.response.txtype.TokenHoldersTypeBO;
 import hashstacs.sdk.util.StacsUtil;
 import hashstacs.sdk.util.StacsResponseEnums.DistributePaymentStatusResponseEnum;
 import hashstacs.sdk.util.StacsResponseEnums.FreezeOrUnfreezeStatusResponseEnum;
+import hashstacs.sdk.util.StacsResponseEnums.FreezeTokensForRedemptionResponseEnum;
 import hashstacs.sdk.util.StacsResponseEnums.GetTokenHoldersParentJsonEnum;
 import hashstacs.sdk.util.StacsResponseEnums.GetTokenHoldersResponseEnum;
 import hashstacs.sdk.util.StacsResponseEnums.GrantSubscribePermStatusResponseEnum;
 import hashstacs.sdk.util.StacsResponseEnums.IssueTokenStatusResponseEnum;
 import hashstacs.sdk.util.StacsResponseEnums.LatestBlockResponseEnum;
 import hashstacs.sdk.util.StacsResponseEnums.PaymentRecordStatusResponseEnum;
+import hashstacs.sdk.util.StacsResponseEnums.RedeemTokenResponseEnum;
 import hashstacs.sdk.util.StacsResponseEnums.SubscribeStatusResponseEnum;
 import hashstacs.sdk.util.StacsResponseEnums.WalletTokenTxHistoryResponseEnum;
 import hashstacs.sdk.wallet.TxHistoryRecord;
@@ -500,6 +504,125 @@ public class ChainConnector {
 			log.error(e.toString());
 		}
 		return null;
+	}
+	
+	public AsyncRespBO freezeTokensForRedemption(FreezeTokensForRedemptionReqBO freezeBO, GspECKey issuerKey) {
+		if(!freezeBO.isValidationSuccessful(issuerKey)) {
+			log.debug("request validation failed.");
+			return null;
+		}
+		String txId = freezeBO.get_txId();
+		CasDecryptReponse rawResponse;
+		try {
+			rawResponse = _bcBaseConn.buybackFrozen(freezeBO.get_origReqObj(),issuerKey);
+			AsyncRespBO asyncResponse = new AsyncRespBO(rawResponse.getRespCode(),txId);
+			JSONObject newObj = StacsUtil.getRespObject(rawResponse);
+			//ensure JSON object is not null or empty
+			if(newObj==null) {
+				//check that the response is successful
+				if(asyncResponse.getAsyncRespMsg().compareTo(AsyncRespBO.asyncResponseCodesEnum.SUCCESS.getRespMessage())!=0) {
+					log.debug("failed response");
+				} 
+			}else if(newObj.isEmpty()) {
+				//check that the response is successful
+				if(asyncResponse.getAsyncRespMsg().compareTo(AsyncRespBO.asyncResponseCodesEnum.SUCCESS.getRespMessage())!=0) {
+					log.debug("failed response");
+				} 
+			}
+			asyncResponse.setRawJsonObject(newObj);
+			return asyncResponse;
+		} catch (IOException e) {
+			log.error(e.toString());
+		}
+		AsyncRespBO failedAsyncResponse = new AsyncRespBO(AsyncRespBO.asyncResponseCodesEnum.FAILED_QUERY.getRespCode(),txId);
+		return failedAsyncResponse;
+	}
+	
+	public RedeemTokenRespBO getRedeemTokenStatus(String txId) {
+		CasDecryptReponse rawResponse;
+		//translate JSON response data into Java Object Types
+		RedeemTokenRespBO redeemTokenStatusBO = new RedeemTokenRespBO();
+		try {
+			rawResponse = _bcBaseConn.queryBuyBack(txId);
+			redeemTokenStatusBO.setRawMsg(rawResponse.getMsg());
+			redeemTokenStatusBO.setRawRespCode(rawResponse.getRespCode());
+			
+			JSONObject newObj = StacsUtil.getRespObject(rawResponse);
+			//ensure JSON object is not null or empty
+			if(newObj==null) {
+				return redeemTokenStatusBO;
+			} else if(newObj.isEmpty()) {
+				return redeemTokenStatusBO;
+			}
+			redeemTokenStatusBO.setRawJSONObj(newObj);
+			//changes to the JSON response keys are maintained in the ResponseBO objects, use these keys to retrieve all available fields
+			for(RedeemTokenResponseEnum respProperty : RedeemTokenResponseEnum.values()) {
+				redeemTokenStatusBO.setAtttribute(respProperty, (String)newObj.getString(respProperty.getRespKey()));
+			}return redeemTokenStatusBO;
+		} catch (IOException e) {
+			log.error(e.toString());
+		}
+		return null;
+	}
+	
+	public FreezeTokensForRedemptionRespBO getFreezeTokensForRedemptionStatus(String txId) {
+		CasDecryptReponse rawResponse;
+		//translate JSON response data into Java Object Types
+		FreezeTokensForRedemptionRespBO freezeTokensForRedemption = new FreezeTokensForRedemptionRespBO();
+		try {
+			rawResponse = _bcBaseConn.queryBuybackFrozen(txId);
+			freezeTokensForRedemption.setRawMsg(rawResponse.getMsg());
+			freezeTokensForRedemption.setRawRespCode(rawResponse.getRespCode());
+			
+			JSONObject newObj = StacsUtil.getRespObject(rawResponse);
+			//ensure JSON object is not null or empty
+			if(newObj==null) {
+				return freezeTokensForRedemption;
+			} else if(newObj.isEmpty()) {
+				return freezeTokensForRedemption;
+			}	
+			freezeTokensForRedemption.setRawJSONObj(newObj);
+			//changes to the JSON response keys are maintained in the ResponseBO objects, use these keys to retrieve all available fields
+			for(FreezeTokensForRedemptionResponseEnum respProperty : FreezeTokensForRedemptionResponseEnum.values()) {
+				freezeTokensForRedemption.setAtttribute(respProperty, (String)newObj.getString(respProperty.getRespKey()));
+			}return freezeTokensForRedemption;
+		} catch (IOException e) {
+			log.error(e.toString());
+		}
+		return null;
+	}
+	
+	public AsyncRespBO redeemTokens(RedeemTokenReqBO redemptionBO, GspECKey signKey) {
+		if(!redemptionBO.isValidationSuccessful(signKey)) {
+			log.debug("request validation failed.");
+			return null;
+		}
+		
+		String txId = redemptionBO.get_txId();
+		CasDecryptReponse rawResponse;
+		try {
+			rawResponse = _bcBaseConn.buyback(redemptionBO.get_origReqObj(), signKey);
+			AsyncRespBO asyncResponse = new AsyncRespBO(rawResponse.getRespCode(),txId);
+			JSONObject newObj = StacsUtil.getRespObject(rawResponse);
+			//ensure JSON object is not null or empty
+			if(newObj==null) {
+				//check that the response is successful
+				if(asyncResponse.getAsyncRespMsg().compareTo(AsyncRespBO.asyncResponseCodesEnum.SUCCESS.getRespMessage())!=0) {
+					log.debug("failed response");
+				} 
+			} else if(newObj.isEmpty()) {
+				//check that the response is successful
+				if(asyncResponse.getAsyncRespMsg().compareTo(AsyncRespBO.asyncResponseCodesEnum.SUCCESS.getRespMessage())!=0) {
+					log.debug("failed response");
+				} 
+			}
+			asyncResponse.setRawJsonObject(newObj);
+			return asyncResponse;
+		} catch (IOException e) {
+			log.error(e.toString());
+		}
+		AsyncRespBO failedAsyncResponse = new AsyncRespBO(AsyncRespBO.asyncResponseCodesEnum.FAILED_QUERY.getRespCode(),txId);
+		return failedAsyncResponse;
 	}
 	
 	public AsyncRespBO freezeOrUnfreezeWallet(FreezeWalletReqBO freezeBO, GspECKey freezeKey) {

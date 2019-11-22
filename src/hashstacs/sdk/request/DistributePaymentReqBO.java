@@ -7,6 +7,8 @@ import java.util.List;
 import com.hashstacs.client.bo.SettlDetailBO;
 import com.hashstacs.client.bo.SettlInterestBO;
 import com.hashstacs.sdk.crypto.GspECKey;
+
+import hashstacs.sdk.response.txtype.TokenHoldersTypeBO;
 import hashstacs.sdk.util.TokenUnit;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
@@ -17,7 +19,7 @@ public class DistributePaymentReqBO extends ReqBO {
 
 	private String _tokenCode;
 	private String _payerWalletAddress;
-	private String _paymentCurrency;
+	private TokenUnit _paymentPerToken;
 	private String _txId;
 	
 	private TokenUnit _totalPayment;
@@ -29,11 +31,11 @@ public class DistributePaymentReqBO extends ReqBO {
 	
 	private SettlInterestBO _origReqObj;
 	
-	public DistributePaymentReqBO(String paymentCurrency,String paymentRecordTxId) {
+	public DistributePaymentReqBO(String paymentRecordTxId, TokenUnit paymentPerToken) {
 		_origReqObj = new SettlInterestBO();
 		_paymentDetails = new ArrayList<SettlDetailBO>();
-		_paymentCurrency = paymentCurrency;
-		_origReqObj.setInterestCurrency(_paymentCurrency);
+		_paymentPerToken = paymentPerToken;
+		_origReqObj.setInterestCurrency(_paymentPerToken.get_currency());
 		_paymentRecordTxId = paymentRecordTxId;
 	}
 	
@@ -46,17 +48,19 @@ public class DistributePaymentReqBO extends ReqBO {
 		_payerWalletAddress=value;
 		_origReqObj.setPayAddr(_payerWalletAddress);
 	}
-
-	public Boolean addRecipientDetails(String walletAddress, TokenUnit receiveAmount) {
-		//verify that the recipient details has the same currency as the payment currency
-		if(!verifyCurrencyType(receiveAmount.get_currency())) {
-			return false;
+	
+	public Boolean addAllRecipientDetails(List<TokenHoldersTypeBO> allRecipients) {
+		for(TokenHoldersTypeBO recipient : allRecipients) {
+			if(recipient.get_walletAddress().compareTo(_payerWalletAddress)!=0) {
+				SettlDetailBO newEntry = new SettlDetailBO();
+				newEntry.setAddress(recipient.get_walletAddress());
+				//calculate the right amount to be paid out
+				BigDecimal numOfTokensHeldByRecipient = new BigDecimal(recipient.get_amount());
+				BigDecimal recipientPayout = numOfTokensHeldByRecipient.multiply(_paymentPerToken.get_amount());
+				newEntry.setAmount(recipientPayout.toString());
+				_paymentDetails.add(newEntry);
+			}
 		}
-		SettlDetailBO newEntry = new SettlDetailBO();
-		newEntry.setAddress(walletAddress);
-		newEntry.setAmount(receiveAmount.get_amount().toString());
-		_paymentDetails.add(newEntry);
-		
 		return true;
 	}
 	
@@ -75,7 +79,7 @@ public class DistributePaymentReqBO extends ReqBO {
 	
 	private void generateTxId() {
 		_origReqObj.setCallbackUrl("http://payment_record_/" + _paymentRecordTxId + "/distribute_payment_/" + _txId);
-		_txId = GspECKey.generate64TxId(_origReqObj.getSign());
+		_txId = GspECKey.generate64TxId(_origReqObj.toString());
 		_origReqObj.setTxId(_txId);
 	}
 	
@@ -88,7 +92,7 @@ public class DistributePaymentReqBO extends ReqBO {
 			numberOfPayees++;
 		}
 		_origReqObj.setInterests(_paymentDetails);
-		_totalPayment = new TokenUnit(_paymentCurrency,totalAmount);
+		_totalPayment = new TokenUnit(_paymentPerToken.get_currency(),totalAmount);
 		_origReqObj.setTotalAmount(totalAmount.toString());
 		_NumOfRecipients = numberOfPayees;
 		_origReqObj.setSize(_NumOfRecipients);	
@@ -99,21 +103,6 @@ public class DistributePaymentReqBO extends ReqBO {
 			log.debug("verifyMinPayeeDetails failed.");
 			return false;
 		}
-		return true;
-	}
-	
-	private Boolean verifyCurrencyType(String _currency) {
-		//if the payment distribution currency was not set, return false
-		if(_paymentCurrency == null) {
-			log.debug("verifyCurrencyType failed.");
-			return false;
-		}
-		//if the payment distribution currency is different from the input currency, return false
-		if(_paymentCurrency.compareTo(_currency)!=0) {
-			log.debug("verifyCurrencyType failed.");
-			return false;
-		}
-			
 		return true;
 	}
 

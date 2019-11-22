@@ -2,6 +2,7 @@ package hashstacs.sdk.test;
 
 import static org.junit.Assert.*;
 
+import java.math.BigDecimal;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 
@@ -16,9 +17,12 @@ import hashstacs.sdk.DistributePaymentsSample;
 import hashstacs.sdk.chain.ChainConnector;
 import hashstacs.sdk.request.DistributePaymentReqBO;
 import hashstacs.sdk.request.GeneratePaymentRecordReqBO;
+import hashstacs.sdk.request.GetTokenHoldersReqBO;
 import hashstacs.sdk.response.AsyncRespBO;
 import hashstacs.sdk.response.DistributePaymentStatusRespBO;
+import hashstacs.sdk.response.GetTokenHoldersRespBO;
 import hashstacs.sdk.util.StacsUtil;
+import hashstacs.sdk.util.TokenUnit;
 
 public class DistributePaymentsTest {
 	private static String _chainPubKey;
@@ -66,10 +70,12 @@ public class DistributePaymentsTest {
 		AsyncRespBO paymentRecordResponse = _chainConn.generatePaymentRecord(paymentRecordRequest, _sponsorSignKey);
 		_paymentRecordId = paymentRecordResponse.get_txId();	
 		
-		DistributePaymentsSample distributePayment = new DistributePaymentsSample("USD",_sponsorWalletAddress,TEST_TOKEN,_paymentRecordId);
+		GetTokenHoldersReqBO redeemTokenHolders = new GetTokenHoldersReqBO(_paymentRecordId,TEST_TOKEN);
+		GetTokenHoldersRespBO redeemTokenHoldersResp = _chainConn.getTokenHolders(redeemTokenHolders);
+		
+		DistributePaymentsSample distributePayment = new DistributePaymentsSample("USD",_sponsorWalletAddress,TEST_TOKEN,_paymentRecordId,redeemTokenHoldersResp);
 		_distributePaymentRequest = distributePayment.getDistributePaymentRequest();
 	}
-	
 	/**
 	 * check that payments can be successfully distributed
 	 * @throws InterruptedException
@@ -88,7 +94,8 @@ public class DistributePaymentsTest {
 	 */
 	@Test
 	public void checkValidationNoPaymentRequests() {
-		DistributePaymentReqBO emptyReqBO = new DistributePaymentReqBO("USD",_paymentRecordId);
+		TokenUnit paymentPerToken = new TokenUnit("USD", new BigDecimal("2"));
+		DistributePaymentReqBO emptyReqBO = new DistributePaymentReqBO(_paymentRecordId,paymentPerToken);
 		AsyncRespBO distributePaymentResponse = _chainConn.distributePayment(emptyReqBO, _sponsorSignKey);
 		assertNull(distributePaymentResponse);
 	}
