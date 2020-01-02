@@ -1,3 +1,4 @@
+
 # STACS SDK
 
 The STACS Protocol is a STACS Permissioned Blockchain Network built by Hashstacs that exposes REST API endpoints for applications to connect and interact with the underlying distributed ledger. This SDK provides all essential tools for communicating with a node residing in a STACS network including signing of transactions and encryption in transit. 
@@ -45,7 +46,7 @@ Java DTO Request Object | Method Call | Sample Code
 ----------------------  | ----------- | -----------  
 `SubscribeReqBO` |  `ChainConnector.subscribeToToken` | `SubscriptionSample.java`
 
-##### 2.1.1.4 Create a payment record for distributing payments (i.e. coupons, dividends) to a digital asset 
+##### 2.1.1.4 Create a payment record for distributing payments (i.e. coupons, dividends) or for redeeming to maturity of a digital asset 
 Java DTO Request Object | Method Call | Sample Code  
 ----------------------  | ----------- | -----------  
 `GeneratePaymentRecordReqBO`| `ChainConnector.generatePaymentRecord` | N.A.
@@ -55,7 +56,17 @@ Java DTO Request Object | Method Call | Sample Code
 ----------------------  | ----------- | -----------  
 `DistributePaymentReqBO` | `ChainConnector.distributePayment` | `DistributePaymentsSample.java`
 
-##### 2.1.1.6 Freeze (and unfreeze) wallet accounts
+##### 2.1.1.6 Freezing of all tokens for redemption action 
+Java DTO Request Object | Method Call | Sample Code 
+----------------------  | ----------- | -----------  
+`FreezeTokensForRedemptionReqBO` | `ChainConnector.freezeTokensForRedemption` | N.A.
+
+##### 2.1.1.7 Redemption of tokens back to the issuer wallet account and payout of digital currency to token holders
+Java DTO Request Object | Method Call | Sample Code  
+----------------------  | ----------- | -----------  
+`RedeemTokensReqBO` | `ChainConnector.redeemTokens` | `RedemptionSample.java`
+
+##### 2.1.1.8 Freeze (and unfreeze) wallet accounts
 Java DTO Request Object | Method Call | Sample Code  
 ----------------------  | ----------- | -----------  
 `FreezeWalletReqBO` | `ChainConnector.freezeOrUnfreezeWallet` | N.A.
@@ -88,10 +99,21 @@ Java DTO Response Object | Method Call
 ------------------------ | -----------
 `DistributePaymentStatusRespBO` | `ChainConnector.getDistributePaymentStatus`
 
-##### 2.1.2.6 Query status of a freeze and unfreeze action on a wallet account
+##### 2.1.2.6 Query status of a token freeze for redemption 
+Java DTO Response Object | Method Call 
+------------------------ | -----------
+`FreezeTokensForRedemptionRespBO` | `ChainConnector.getFreezeTokensForRedemptionStatus`
+
+##### 2.1.2.7 Query status of a redemption action
+Java DTO Response Object | Method Call 
+------------------------ | -----------
+`RedeemTokenRespBO` | `ChainConnector.getRedeemTokensStatus`
+
+##### 2.1.2.8 Query status of a freeze and unfreeze action on a wallet account
 Java DTO Response Object | Method Call 
 ------------------------ | -----------
 `FreezeOrUnfreezeStatusRespBO` | `ChainConnector.getFreezeOrUnfreezeWalletStatus`
+
  
 #### 2.1.3 Synchronous Method Calls to query the ledger
 These calls does a simple check of the ledger state with input parameters wrapped in a DTO Request object and returns a DTO response object.
@@ -106,6 +128,11 @@ Java DTO Request Object | Java DTO Response Object | Method Call
 ----------------------- | ------------------------ | ------------
 `TxHistoryBetweenBlocksReqBO` | `TxHistoryRespBO`  | `ChainConnector.getTxsBetweenBlocks`
  
+ ##### 2.1.3.3 Retrieve all wallet addresses holding onto a specific token (needs a payment record as a pre-requisite)
+ Java DTO Request Object | Java DTO Response Object | Method Call 
+----------------------- | ------------------------ | ------------
+`GetTokenHoldersReqBO` | `GetTokenHoldersRespBO`  | `ChainConnector.getTokenHolders`
+
 ### 2.2 Wallet-related Methods 
 
 While sample codes have been provided to indicate the required parameters of the DTO object, examples of the actual execution for each smart contract listed below is also provided in the `WalletSampleUsage()` function in the `SampleUsage.java` file. 
