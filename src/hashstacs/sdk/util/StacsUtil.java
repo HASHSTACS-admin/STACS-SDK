@@ -52,7 +52,7 @@ public class StacsUtil {
 	public static void createWallet() {
 		GspECKey newKey = new GspECKey();
 		System.out.println("Public Key: " + newKey.getPublicKeyAsHex());
-		System.out.println("Private Key: " + StacsUtil.toHex(newKey.getPrivKeyBytes()));
+		System.out.println("Private Key: " + StacsUtil.toHexString(newKey.getPrivKeyBytes()));
 		System.out.println("Wallet Address: " + newKey.getHexAddress());
 	}
 	
@@ -108,6 +108,10 @@ public class StacsUtil {
 	public static String toHex(byte[] bytes) {
 	    BigInteger bi = new BigInteger(1, bytes);
 	    return String.format("%0" + (bytes.length << 1) + "X", bi);
+	}
+	
+	public static String toHexString(byte[] data) {
+	    return Hex.toHexString(data);    
 	}
 	
 	/**
