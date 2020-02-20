@@ -16,6 +16,8 @@ import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.hashstacs.sdk.crypto.GspECKey;
 import com.hashstacs.sdk.wallet.dock.bo.CasDecryptReponse;
 
+import org.spongycastle.util.encoders.Hex;
+
 import hashstacs.sdk.response.AsyncRespBO;
 import hashstacs.sdk.response.txtype.IssuanceTxTypeBO;
 import hashstacs.sdk.response.txtype.PaymentRecordTypeBO;
