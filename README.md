@@ -6,6 +6,9 @@ The STACS Java SDK enables applications to sit on top of a STACS Native Permissi
 
 Reach out to the Solutions team at Hashstacs for questions! support@stacs.io
 
+## STACS SDK Support
+This SDK will not be receiving any support as we will be publishing a new SDK with more features in the near time. 
+
 ## 1. SDK Key Developer Features
 1. Invoke Smart Contract Function calls directly to the STACS network 
 2. SDK function calls have built-in signatures for sending requests with your private key
@@ -151,11 +154,14 @@ Required minimum versions:
 * Apache Maven 3.6
 
 
-Request from the STACS node owner the following information:
+Request from the STACS node owner (info@stacs.io) the following information:
 1. Node Public Key
 2. Node Merchant Id
 3. Node AES Key
 4. Node Gateway URL 
+5. stacs-base-2.1.0.jar (placed within the lib folder in the root path)
+6. stacs-bm-2.1.1.jar (placed within the lib folder in the root path)
+
 You will also have to generate a keypair and will have to submit the public key to the STACS node owner.
 The private key generated will have to be entered as the `node_prikey` field in the configuration file.
 
